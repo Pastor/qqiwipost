@@ -10,6 +10,7 @@
 #include <QtCore/QSettings>
 #include <QtCore/QVariant>
 #include <QtCore/QThreadPool>
+#include <QtCore/QFile>
 
 #include <QtNetwork/QNetworkProxyFactory>
 
@@ -17,8 +18,12 @@
 #include <QtGui/QDesktopServices>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMessageBox>
+#include <QtGui/QImage>
 
 #include <qiwipost/qiwipostrequester.h>
+
+#include <qiwipost/qiwipost.h>
+#include <qiwigui/qiwigui.h>
 
 static inline QDir
 getSharePath() {
@@ -73,19 +78,26 @@ main(int argc, char **argv) {
     }
 #endif
 #endif
-    Qiwi::QiwiPostRequester *req = new Qiwi::QiwiPostRequester();
-    Qiwi::QueryParams params;
-    req->setUrl("http://apitest.qiwipost.ru");
-    req->setUsername("8880000000");
-    req->setPassword("test");
-    req->request("listmachines_csv", params);
-    req->wait();
-    if ( req->hasError() ) {
-        qDebug() << "Error: " << req->errorString();
-    } else {
-        QMessageBox::information(0, "INFO", req->result());
+    Qiwi::QiwiPost post;
+    Qiwi::Error error;
+    post.loadSettings(shareDir.absoluteFilePath("qiwipost.db"));
+    post.applaySettings();
+    Qiwi::PackageCollection collection = post.loadPackages(error);
+    Qiwi::PackageListIterator it(collection.packages);
+    while ( it.hasNext() ) {
+      Qiwi::Package p = it.next();
+      qDebug() << p.alternativeBoxMachineName;
+      qDebug() << p.amountCharged;
+      qDebug() << p.calculatedChargeAmount;
+      qDebug() << p.creationDate;
+      qDebug() << p.isConfPrinted;
+      qDebug() << p.labelCreationDate;
+      qDebug() << p.onDeliveryAmount;
+      qDebug() << p.packcode;
+      qDebug() << p.packsize;
+      qDebug() << p.status;
     }
-    delete req;
+    qDebug() << error.desc;
     app.exit(-1);
     //return app.exec();
 }

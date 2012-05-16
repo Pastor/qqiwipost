@@ -2,10 +2,49 @@
 #define DAO_H
 #include <QObject>
 #include <QList>
+#include <QByteArray>
 #include <QMetaType>
 #include "qiwipost_global.h"
 
+class QXmlStreamReader;
+
+
 namespace Qiwi {
+
+struct Error;
+struct QIWIPOSTSHARED_EXPORT Error {
+    QString key;
+    QString desc;
+    bool hasError;
+
+    Error()
+      : hasError(false)
+    {}
+
+    Error(const Error &other)
+      : key(other.key), desc(other.desc), hasError(other.hasError)
+    {}
+
+    bool load(const QByteArray &data);
+};
+
+struct Status;
+struct QIWIPOSTSHARED_EXPORT Status {
+    QString status;
+
+    Status()
+    {}
+
+    Status(const Status &other)
+      : status(other.status)
+    {}
+
+    void load(const QByteArray &data, Error &error);
+};
+
+struct Machine;
+typedef QList<Machine>             MachineList;
+typedef QListIterator<Machine>     MachineListIterator;
 
 struct QIWIPOSTSHARED_EXPORT Machine {
   QString name;
@@ -16,6 +55,9 @@ struct QIWIPOSTSHARED_EXPORT Machine {
   QString latitude;
   QString longitude;
   QString locationDesc;
+  QString province;
+  QString status;
+  QString operatinghours;
 
   Machine()
   {}
@@ -24,11 +66,33 @@ struct QIWIPOSTSHARED_EXPORT Machine {
     : name(other.name), postcode(other.postcode),
       street(other.street), buildingNumber(other.buildingNumber),
       town(other.town), latitude(other.latitude),
-      longitude(other.longitude), locationDesc(other.locationDesc)
+      longitude(other.longitude), locationDesc(other.locationDesc),
+      province(other.province), status(other.status),
+      operatinghours(other.operatinghours)
   {}
+
+  void               load(QXmlStreamReader &reader);
+  static MachineList parseList(const QByteArray &data, Error &error);
+
 };
-typedef QList<Machine>             MachineList;
-typedef QListIterator<Machine>     MachineListIterator;
+
+struct Package;
+typedef QList<Package>             PackageList;
+typedef QListIterator<Package>     PackageListIterator;
+
+struct QIWIPOSTSHARED_EXPORT PackageCollection {
+    QString startDate;
+    QString endDate;
+    PackageList packages;
+
+    PackageCollection()
+    {}
+
+    PackageCollection(const PackageCollection &other)
+      : startDate(other.startDate), endDate(other.endDate),
+        packages(other.packages)
+    {}
+};
 
 struct QIWIPOSTSHARED_EXPORT Package {
   QString packcode;
@@ -44,6 +108,7 @@ struct QIWIPOSTSHARED_EXPORT Package {
   QString onDeliveryAmount;
   QString preferedBoxMachineName;
   QString alternativeBoxMachineName;
+  QString receiveremail;
 
   Package()
   {}
@@ -57,12 +122,16 @@ struct QIWIPOSTSHARED_EXPORT Package {
       isConfPrinted(other.isConfPrinted), labelPrinted(other.labelPrinted),
       onDeliveryAmount(other.onDeliveryAmount),
       preferedBoxMachineName(other.preferedBoxMachineName),
-      alternativeBoxMachineName(other.alternativeBoxMachineName)
+      alternativeBoxMachineName(other.alternativeBoxMachineName),
+      receiveremail(other.receiveremail)
   {}
-
+  void                     load(QXmlStreamReader &reader);
+  static const PackageCollection parseList(const QByteArray &data, Error &error);
 };
-typedef QList<Package>             PackageList;
-typedef QListIterator<Package>     PackageListIterator;
+
+struct Payment;
+typedef QList<Payment>             PaymentList;
+typedef QListIterator<Payment>     PaymentListIterator;
 
 struct QIWIPOSTSHARED_EXPORT Payment {
   QString amount;
@@ -78,8 +147,7 @@ struct QIWIPOSTSHARED_EXPORT Payment {
       packcode(other.packcode), transactionDate(other.transactionDate)
   {}
 };
-typedef QList<Payment>             PaymentList;
-typedef QListIterator<Payment>     PaymentListIterator;
+
 
 
 struct PackageReg;
@@ -111,6 +179,10 @@ struct QIWIPOSTSHARED_EXPORT PackageReg {
 
 };
 
+struct PackType;
+typedef QList<PackType>             PackTypeList;
+typedef QListIterator<PackType>     PackTypeListIterator;
+
 struct QIWIPOSTSHARED_EXPORT PackType {
   QString type;
   QString price;
@@ -122,8 +194,10 @@ struct QIWIPOSTSHARED_EXPORT PackType {
     : type(other.type), price(other.price)
   {}
 };
-typedef QList<PackType>             PackTypeList;
-typedef QListIterator<PackType>     PackTypeListIterator;
+
+struct Station;
+typedef QList<Station>             StationList;
+typedef QListIterator<Station>     StationListIterator;
 
 struct QIWIPOSTSHARED_EXPORT Station {
   QString metroStationName;
@@ -140,11 +214,11 @@ struct QIWIPOSTSHARED_EXPORT Station {
   {}
 
 };
-typedef QList<Station>             StationList;
-typedef QListIterator<Station>     StationListIterator;
+
 
 }
 
+Q_DECLARE_METATYPE(Qiwi::Error)
 Q_DECLARE_METATYPE(Qiwi::Machine)
 Q_DECLARE_METATYPE(Qiwi::Package)
 Q_DECLARE_METATYPE(Qiwi::PackageReg)

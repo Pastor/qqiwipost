@@ -10,3 +10,10 @@
 *.lai
 *.la
 *.a
+Makefile*
+*.pdb
+*.ilk
+*.exp
+*.Debug
+*.Release
+*.pro.user

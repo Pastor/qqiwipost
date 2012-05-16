@@ -1,0 +1,25 @@
+2310d939c4804b37cf2f80f440fcaf5b4f709b62  lib/openjp3dvm.lib
+114cd69e13caf3460499186e2fddd3e3db4e9515  lib/openjpeg.lib
+d8521ea643623c430339b4f6de0fd5e20443d83d  include/jp3dvm/bio.h
+36b6086e29274821eae9bb22b6cad886c66efc6f  include/jp3dvm/cio.h
+21259872c66a8c34a5e7c56773b002b03c357579  include/jp3dvm/dwt.h
+4be6a0e5d0b624a532c149eb0c8801b0c55f2690  include/jp3dvm/event.h
+6324d479cb7e071685bcb2eddf3e97ab3c3963ca  include/jp3dvm/fix.h
+2ee3a0fcb65b277c3af59317f7ca887d3c9e4777  include/jp3dvm/int.h
+277390d633562025e8df4e10d043d34a70d756a9  include/jp3dvm/jp3d.h
+562bb190a675f81f1991caccba5b04418a1df0bb  include/jp3dvm/jp3d_lib.h
+fe0e5ca4f79edb5e2c6be49ca250a709d367746c  include/jp3dvm/mct.h
+9abc12e46b4a87f996cd8313b730b6cbced47405  include/jp3dvm/mqc.h
+a1fb1d1f7e6d25fb686673c4b9f2e99114448c7f  include/jp3dvm/openjpeg.h
+f9a258e54f30ca00561e23f1ddfe8aa34d17e9c4  include/jp3dvm/opj_includes.h
+3ab42f88dc3e0a5b4af855e39f691489036a7041  include/jp3dvm/pi.h
+97f42e37b0bd52979aa1d89f792ab4fd0e5d8bec  include/jp3dvm/raw.h
+6b69bec903096481522233b9da827a3008d9f476  include/jp3dvm/t1.h
+60dbbe5c58c9ce1ef793cdcfcb4c6558ca740eb1  include/jp3dvm/t1_3d.h
+5a932f9a0ed725e3041f90a22567607b7238569b  include/jp3dvm/t2.h
+2a48f46f6bceed0edb84c141a648e767aa39d2e3  include/jp3dvm/tcd.h
+12669b8986d3ea248704850cc1f0fefd63fb823e  include/jp3dvm/tgt.h
+1308633bedbcea5e4a09722085904f6b81396999  include/jp3dvm/volume.h
+7e3112f8377b99feb3721fdf59a329d1d00228c0  include/openjpeg/openjpeg.h
+manifest/openjpeg-vc100-1.3-2-lib.mft
+manifest/openjpeg-vc100-1.3-2-lib.ver

@@ -8,7 +8,7 @@ SOURCES += main.cpp
 
 include(../rpath.pri)
 
-LIBS *= -l$$qtLibraryName(QiwiPost)
+LIBS *= -l$$qtLibraryName(QiwiPost) -l$$qtLibraryName(QiwiGui)
 
 win32 {
     RC_FILE = qiwipost.rc

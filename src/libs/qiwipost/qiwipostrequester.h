@@ -26,7 +26,9 @@ public:
   void setPassword(const QString &password);
   void setUrl(const QString &url);
 
-  void request(const QString &method, const QueryParams &params);
+  void request(const QString &method,
+               const QueryParams &getParams,
+               const QueryParams &postParams);
 
   const QByteArray &result() const;
 

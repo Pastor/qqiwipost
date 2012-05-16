@@ -13,7 +13,7 @@ namespace Internal {
     QiwiPostRequesterPrivate();
     ~QiwiPostRequesterPrivate();
 
-    QUrl prepareUrl(const QString &method) const;
+    QUrl prepareUrl(const QString &method, const QueryParams &params) const;
     QByteArray prepareParams(const QueryParams &params) const;
 
     QNetworkAccessManager *m;

@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QNetworkReply>
+#include <QDebug>
 #include "qiwipostrequester.h"
 #include "qiwipostrequester_p.h"
 
@@ -18,9 +19,15 @@ QiwiPostRequesterPrivate::~QiwiPostRequesterPrivate() {
 }
 
 QUrl
-QiwiPostRequesterPrivate::prepareUrl(const QString &method) const {
+QiwiPostRequesterPrivate::prepareUrl(const QString &method,
+                                     const QueryParams &params) const {
   QUrl result(url);
   result.addQueryItem("do", method);
+  QueryParamsIterator it(params);
+  while ( it.hasNext() ) {
+    it.next();
+    result.addQueryItem(it.key(), it.value());
+  }
   return result;
 }
 
@@ -48,6 +55,7 @@ QiwiPostRequesterPrivate::finished(QNetworkReply *replay) {
   replayHeaders.clear();
   result = replay->readAll();
   replayHeaders = replay->rawHeaderPairs();
+  qDebug() << result;
   if ( replay->error() != QNetworkReply::NoError )
     error = replay->errorString();
   workComplete = true;
@@ -78,9 +86,11 @@ QiwiPostRequester::setUrl(const QString &url) {
 }
 
 void
-QiwiPostRequester::request(const QString &method, const QueryParams &params) {
-  QByteArray data = d->prepareParams(params);
-  QUrl url = d->prepareUrl(method);
+QiwiPostRequester::request(const QString &method,
+                           const QueryParams &getParams,
+                           const QueryParams &postParams) {
+  QByteArray data = d->prepareParams(postParams);
+  QUrl url = d->prepareUrl(method, getParams);
   QNetworkRequest req(url);
   req.setHeader(QNetworkRequest::ContentLengthHeader, data.size());
   req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
