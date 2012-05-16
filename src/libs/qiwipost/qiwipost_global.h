@@ -1,0 +1,12 @@
+#ifndef QIWIPOST_GLOBAL_H
+#define QIWIPOST_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(QIWIPOST_LIBRARY)
+#  define QIWIPOSTSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define QIWIPOSTSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // QIWIPOST_GLOBAL_H
