@@ -11,7 +11,8 @@ using namespace Qiwi::Internal;
 
 /** */
 QiwiPostRequesterPrivate::QiwiPostRequesterPrivate()
-  : m(new QNetworkAccessManager(this)), workComplete(true) {
+  : m(new QNetworkAccessManager(this)), workComplete(true),
+    timeout(-1), timeShot(false) {
   connect(m, SIGNAL(finished(QNetworkReply*)),
           this, SLOT(finished(QNetworkReply*)));
 }
@@ -88,6 +89,11 @@ QiwiPostRequester::setUrl(const QString &url) {
 }
 
 void
+QiwiPostRequester::setTimeout(quint64 timeout) {
+  d->timeout = timeout;
+}
+
+void
 QiwiPostRequester::request(const QString &method,
                            const QueryParams &getParams,
                            const QueryParams &postParams) {
@@ -101,14 +107,22 @@ QiwiPostRequester::request(const QString &method,
 }
 
 void
-QiwiPostRequester::wait(quint64 msec) {
+QiwiPostRequester::wait() {
+  d->timeShot = false;
   qint64 curr = QDateTime::currentDateTime().toMSecsSinceEpoch();
   while ( !d->workComplete ) {
     QCoreApplication::processEvents();
-    if ( QDateTime::currentDateTime().toMSecsSinceEpoch() - curr >= (qint64)msec ) {
+    if ( QDateTime::currentDateTime().toMSecsSinceEpoch() - curr >=
+         (qint64)d->timeout ) {
+      d->timeShot = true;
       return;
     }
   }
+}
+
+bool
+QiwiPostRequester::isTimeout() const {
+  return d->timeShot;
 }
 
 const QByteArray &

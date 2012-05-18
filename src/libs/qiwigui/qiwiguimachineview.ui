@@ -19,15 +19,12 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Machines</string>
   </property>
   <property name="modal">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>2</number>
-   </property>
    <property name="margin">
     <number>2</number>
    </property>
@@ -45,121 +42,145 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QWidget" name="widget" native="true">
-       <layout class="QFormLayout" name="formLayout">
-        <property name="horizontalSpacing">
-         <number>2</number>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="margin">
+       <number>2</number>
+      </property>
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblName">
+        <property name="text">
+         <string>Name</string>
         </property>
-        <property name="verticalSpacing">
-         <number>2</number>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="leName">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
-        <property name="margin">
-         <number>2</number>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="lblProvince">
+        <property name="text">
+         <string>Province</string>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="lblName">
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="leName"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="lblPostCode">
-          <property name="text">
-           <string>PostCode</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lePostCode"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="lblStreet">
-          <property name="text">
-           <string>Street</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="leStreet"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="lblBuilding">
-          <property name="text">
-           <string>Building</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="leBuilding"/>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="lblTown">
-          <property name="text">
-           <string>Town</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="leTown"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QWidget" name="widget_2" native="true">
-       <layout class="QFormLayout" name="formLayout_2">
-        <property name="horizontalSpacing">
-         <number>2</number>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLineEdit" name="leProvince">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
-        <property name="verticalSpacing">
-         <number>2</number>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblPostCode">
+        <property name="text">
+         <string>PostCode</string>
         </property>
-        <property name="margin">
-         <number>2</number>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lePostCode">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="lblProvince">
-          <property name="text">
-           <string>Province</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="leProvince"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="lblStatus">
-          <property name="text">
-           <string>Status</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="leStatus"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="lblWork">
-          <property name="text">
-           <string>Work</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="leWork"/>
-        </item>
-        <item row="3" column="1">
-         <widget class="QTextEdit" name="teLocationDesc"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="lblStatus">
+        <property name="text">
+         <string>Status</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLineEdit" name="leStatus">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lblStreet">
+        <property name="text">
+         <string>Street</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="leStreet">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="lblWork">
+        <property name="text">
+         <string>Work</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLineEdit" name="leWork">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lblBuilding">
+        <property name="text">
+         <string>Building</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="leBuilding">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" rowspan="3" colspan="2">
+       <widget class="QTextEdit" name="teLocationDesc"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lblTown">
+        <property name="text">
+         <string>Town</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="leTown">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="lblPosition">
+        <property name="text">
+         <string>Position</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="lePosition">
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -196,12 +217,24 @@
        <property name="text">
         <string>Select</string>
        </property>
+       <property name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/internal/images/16x16/book_go.png</normaloff>:/internal/images/16x16/book_go.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
       </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

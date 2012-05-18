@@ -22,6 +22,8 @@ namespace Internal {
     QString password;
     QByteArray result;
     QString error;
+    quint64 timeout;
+    bool    timeShot;
     QList< QPair<QByteArray, QByteArray> > replayHeaders;
     volatile bool workComplete;
   protected slots:

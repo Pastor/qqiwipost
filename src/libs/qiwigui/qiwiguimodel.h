@@ -35,8 +35,29 @@ public:
   void load(const MachineList &list);
   const Machine rowAt(int index) const;
 private:
-  QFileIconProvider *iconProvider;
   MachineList        machines;
+  QStringList        columns;
+};
+
+class QIWIGUISHARED_EXPORT QiwiPostPackageTableModel: public QAbstractTableModel {
+  Q_OBJECT
+public:
+  QiwiPostPackageTableModel(QObject *parent = 0);
+  virtual ~QiwiPostPackageTableModel();
+
+  virtual QModelIndex index(int row, int column,
+                            const QModelIndex &parent = QModelIndex()) const;
+  virtual QModelIndex parent(const QModelIndex &child) const;
+  virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+  virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+  void load(const PackageList &list);
+  const Package rowAt(int index) const;
+private:
+  PackageList        packages;
   QStringList        columns;
 };
 

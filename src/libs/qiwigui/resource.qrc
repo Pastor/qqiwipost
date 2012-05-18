@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/internal">
+        <file>images/16x16/server.png</file>
+        <file>images/16x16/server_connect.png</file>
+        <file>images/16x16/book_go.png</file>
+        <file>images/16x16/basket.png</file>
+        <file>images/16x16/basket_delete.png</file>
+        <file>images/16x16/basket_error.png</file>
+        <file>images/16x16/basket_go.png</file>
+        <file>images/16x16/basket_add.png</file>
+        <file>images/16x16/basket_edit.png</file>
+        <file>images/16x16/basket_put.png</file>
+        <file>images/16x16/basket_remove.png</file>
+        <file>images/16x16/arrow_rotate_clockwise.png</file>
+        <file>images/16x16/barcode.png</file>
+        <file>images/16x16/magnet.png</file>
+    </qresource>
+</RCC>

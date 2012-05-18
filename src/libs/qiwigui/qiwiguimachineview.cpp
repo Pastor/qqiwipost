@@ -31,8 +31,15 @@ QiwiGuiMachineView::listUpdate(QiwiPost *post) {
   } else {
     mm->load(list);
     for (int i = 0; i < mm->rowCount(); ++i) {
-      ui->tvMachines->setRowHeight(i, 18);
+      ui->tvMachines->setRowHeight(i, 22);
     }
+    ui->tvMachines->setColumnHidden(0,  true);
+    ui->tvMachines->setColumnHidden(5,  true);
+    ui->tvMachines->setColumnHidden(6,  true);
+    ui->tvMachines->setColumnHidden(7,  true);
+    ui->tvMachines->setColumnHidden(9,  true);
+    ui->tvMachines->setColumnHidden(10, true);
+    ui->tvMachines->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
   }
 }
 
@@ -72,4 +79,7 @@ QiwiGuiMachineView::triggeredMachine(const Machine &machine) {
   ui->leTown->setText(machine.town);
   ui->leWork->setText(machine.operatinghours);
   ui->teLocationDesc->setText(machine.locationDesc);
+  ui->lePosition->setText(trUtf8("%1:%2").
+                          arg(machine.latitude).
+                          arg(machine.longitude));
 }

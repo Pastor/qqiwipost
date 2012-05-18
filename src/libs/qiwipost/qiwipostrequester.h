@@ -25,18 +25,17 @@ public:
   void setUsername(const QString &username);
   void setPassword(const QString &password);
   void setUrl(const QString &url);
+  void setTimeout(quint64 timeout);
 
   void request(const QString &method,
                const QueryParams &getParams,
                const QueryParams &postParams);
 
   const QByteArray &result() const;
-
   bool hasError() const;
-
+  bool isTimeout() const;
   const QString &errorString() const;
-
-  void wait(quint64 msec = -1);
+  void wait();
 
 private:
   QiwiPostRequesterPrivate *d;

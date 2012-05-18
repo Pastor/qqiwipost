@@ -42,12 +42,15 @@ namespace Internal {
       << "INSERT INTO `properties`(`key`, `value`)"
          "  VALUES('qiwi.proto.version', '1.2')"
       << "INSERT INTO `properties`(`key`, `value`)"
-         "  VALUES('qiwi.language', 'RU')";
+         "  VALUES('qiwi.language', 'RU')"
+      << "INSERT INTO `properties`(`key`, `value`)"
+         "  VALUES('qiwi.timeout', '20000')";
   static const char * const QIWIPOST_URL = "qiwi.url";
   static const char * const QIWIPOST_USERNAME = "qiwi.username";
   static const char * const QIWIPOST_PASSWORD = "qiwi.password";
   static const char * const QIWIPOST_VERSION  = "qiwi.version";
   static const char * const QIWIPOST_LANGUAGE = "qiwi.language";
+  static const char * const QIWIPOST_TIMEOUT  = "qiwi.timeout";
 }
 }
 
@@ -142,6 +145,8 @@ QiwiPost::applaySettings() {
     qDebug() << "Url not set";
     return;
   }
+  quint64 timeout = d->props[QIWIPOST_TIMEOUT].toInt();
+  d->requester.setTimeout(timeout);
   d->requester.setUsername(username);
   d->requester.setPassword(password);
   d->requester.setUrl(url);
@@ -176,9 +181,13 @@ const MachineList
 QiwiPost::loadMachines(Error &error) {
   QueryParams params;
   d->requester.request("listmachines_xml", params, params);
-  d->requester.wait(5000);
+  d->requester.wait();
   if ( hasError() ) {
     qDebug() << errorString();
+    return MachineList();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
     return MachineList();
   }
   return Machine::parseList(d->requester.result(), error);
@@ -194,6 +203,10 @@ QiwiPost::loadMachinesByPoint(const QString &postCode, Error &error) {
   d->requester.wait();
   if ( hasError() ) {
     qDebug() << errorString();
+    return MachineList();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
     return MachineList();
   }
   return Machine::parseList(d->requester.result(), error);
@@ -211,6 +224,10 @@ QiwiPost::loadMachinesByStation(const QString &station, const QString &town, Err
   if ( hasError() ) {
     qDebug() << errorString();
     return MachineList();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return MachineList();
   }
   return Machine::parseList(d->requester.result(), error);
 }
@@ -225,6 +242,10 @@ QiwiPost::loadMachinesByName(const QString &name, Error &error) {
   d->requester.wait();
   if ( hasError() ) {
     qDebug() << errorString();
+    return MachineList();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
     return MachineList();
   }
   return Machine::parseList(d->requester.result(), error);
@@ -243,6 +264,10 @@ QiwiPost::loadLabel(const QString &packcode, Error &error, const QString &type) 
   d->requester.wait();
   if ( hasError() ) {
     qDebug() << errorString();
+    return QByteArray();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
     return QByteArray();
   }
   QByteArray data = d->requester.result();
@@ -263,6 +288,10 @@ QiwiPost::loadLabel(Error &error, const QString &packcode, const QString &custom
   if ( hasError() ) {
     qDebug() << errorString();
     return QByteArray();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return QByteArray();
   }
   QByteArray data = d->requester.result();
   if ( error.load(data) )
@@ -282,6 +311,10 @@ QiwiPost::loadPackageStatus(const QString &packcode, Error &error) {
   if ( hasError() ) {
     qDebug() << errorString();
     return QByteArray();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return "";
   }
   Status status;
   status.load(d->requester.result(), error);
@@ -310,6 +343,10 @@ QiwiPost::loadPackages(Error &error,
   if ( hasError() ) {
     qDebug() << errorString();
     return PackageCollection();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return PackageCollection();
   }
   return Package::parseList(d->requester.result(), error);
 }
@@ -330,6 +367,10 @@ QiwiPost::loadPayments(Error &error,
   if ( hasError() ) {
     qDebug() << errorString();
     return PaymentCollection();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return PaymentCollection();
   }
   return Payment::parseList(d->requester.result(), error);
 }
@@ -344,6 +385,10 @@ QiwiPost::registerPackage(Error &error, const PackageReg &reg) {
   d->requester.wait();
   if ( hasError() ) {
     qDebug() << errorString();
+    return PackageList();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
     return PackageList();
   }
   return Package::parseList(d->requester.result(), error).packages;
@@ -360,6 +405,10 @@ QiwiPost::unregisterPackage(Error &error, const QString &packcode) {
   QByteArray data = d->requester.result();
   if ( hasError() ) {
     qDebug() << errorString();
+    return false;
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
     return false;
   } else if ( error.load(data) ) {
     return false;
@@ -380,6 +429,10 @@ QiwiPost::chanchePackageSize(Error &error, const QString &packcode, const QStrin
   if ( hasError() ) {
     qDebug() << errorString();
     return false;
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return false;
   } else if ( error.load(data) ) {
     return false;
   }
@@ -397,6 +450,10 @@ QiwiPost::payPackage(Error &error, const QString &packcode) {
   QByteArray data = d->requester.result();
   if ( hasError() ) {
     qDebug() << errorString();
+    return false;
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
     return false;
   } else if ( error.load(data) ) {
     return false;
@@ -416,6 +473,10 @@ QiwiPost::confirmPackages(Error &error, const QStringList &packages, bool testPr
   if ( hasError() ) {
     qDebug() << errorString();
     return QByteArray();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return QByteArray();
   } else if ( error.load(data) ) {
     return QByteArray();
   }
@@ -432,6 +493,10 @@ QiwiPost::listPrices(Error &error) {
   if ( hasError() ) {
     qDebug() << errorString();
     return PriceCollection();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return PriceCollection();
   }
   return Price::parseList(d->requester.result(), error);
 }
@@ -446,6 +511,10 @@ QiwiPost::listStations(Error &error, const QString &town) {
   d->requester.wait();
   if ( hasError() ) {
     qDebug() << errorString();
+    return StationList();
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
     return StationList();
   }
   return Station::parseList(d->requester.result(), error);

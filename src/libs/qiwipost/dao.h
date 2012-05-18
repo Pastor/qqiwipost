@@ -20,7 +20,7 @@ struct QIWIPOSTSHARED_EXPORT Error {
     bool hasError;
 
     Error()
-      : hasError(false)
+      : hasError(false), internalError()
     {}
 
     Error(const Error &other)

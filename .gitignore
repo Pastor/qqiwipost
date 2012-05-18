@@ -10,10 +10,22 @@
 *.lai
 *.la
 *.a
+
+# Qt
+*.obj
+*.moc
+ui_*
 Makefile*
+*.Debug
+*.Release
+
+# MSVC
 *.pdb
 *.ilk
 *.exp
-*.Debug
-*.Release
+*.dll
+*.lib
+*.exe
+
+# Qt Creator
 *.pro.user

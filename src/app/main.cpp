@@ -20,11 +20,11 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QImage>
 
-#include <qiwipost/qiwipostrequester.h>
+//#include <qiwipost/qiwipostrequester.h>
 
-#include <qiwipost/qiwipost.h>
-#include <qiwigui/qiwigui.h>
-#include <qiwigui/qiwiguimachineview.h>
+//#include <qiwipost/qiwipost.h>
+//#include <qiwigui/qiwigui.h>
+#include <qiwigui/qiwipostmain.h>
 
 static inline QDir
 getSharePath() {
@@ -80,14 +80,14 @@ main(int argc, char **argv) {
 #endif
 #endif
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    Qiwi::QiwiGuiMachineView w;
-    Qiwi::QiwiPost post;
-    post.loadSettings(shareDir.absoluteFilePath("qiwipost.db"));
-    post.applaySettings();
-    w.listUpdate(&post);
-    w.exec();
-    qDebug() << w.selectedMachine().name;
-    app.exit();
-    return -1;
-    return app.exec();
+    Qiwi::QiwiPostMain *pmain = new Qiwi::QiwiPostMain();
+    pmain->loadSettings(shareDir.absoluteFilePath("qiwipost.db"));
+    pmain->applaySettings();
+    pmain->setWindowState(Qt::WindowMaximized);
+    pmain->show();
+    pmain->reload();
+    int result = app.exec();
+    pmain->saveSettings();
+    //delete pmain;
+    return result;
 }
