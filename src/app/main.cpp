@@ -24,6 +24,7 @@
 
 #include <qiwipost/qiwipost.h>
 #include <qiwigui/qiwigui.h>
+#include <qiwigui/qiwiguimachineview.h>
 
 static inline QDir
 getSharePath() {
@@ -78,26 +79,15 @@ main(int argc, char **argv) {
     }
 #endif
 #endif
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+    Qiwi::QiwiGuiMachineView w;
     Qiwi::QiwiPost post;
-    Qiwi::Error error;
     post.loadSettings(shareDir.absoluteFilePath("qiwipost.db"));
     post.applaySettings();
-    Qiwi::PackageCollection collection = post.loadPackages(error);
-    Qiwi::PackageListIterator it(collection.packages);
-    while ( it.hasNext() ) {
-      Qiwi::Package p = it.next();
-      qDebug() << p.alternativeBoxMachineName;
-      qDebug() << p.amountCharged;
-      qDebug() << p.calculatedChargeAmount;
-      qDebug() << p.creationDate;
-      qDebug() << p.isConfPrinted;
-      qDebug() << p.labelCreationDate;
-      qDebug() << p.onDeliveryAmount;
-      qDebug() << p.packcode;
-      qDebug() << p.packsize;
-      qDebug() << p.status;
-    }
-    qDebug() << error.desc;
-    app.exit(-1);
-    //return app.exec();
+    w.listUpdate(&post);
+    w.exec();
+    qDebug() << w.selectedMachine().name;
+    app.exit();
+    return -1;
+    return app.exec();
 }

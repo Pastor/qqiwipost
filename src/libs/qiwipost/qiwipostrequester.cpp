@@ -1,6 +1,8 @@
 #include <QCoreApplication>
 #include <QNetworkReply>
 #include <QDebug>
+#include <QThread>
+#include <QDateTime>
 #include "qiwipostrequester.h"
 #include "qiwipostrequester_p.h"
 
@@ -99,9 +101,14 @@ QiwiPostRequester::request(const QString &method,
 }
 
 void
-QiwiPostRequester::wait() {
-  while ( !d->workComplete )
+QiwiPostRequester::wait(quint64 msec) {
+  qint64 curr = QDateTime::currentDateTime().toMSecsSinceEpoch();
+  while ( !d->workComplete ) {
     QCoreApplication::processEvents();
+    if ( QDateTime::currentDateTime().toMSecsSinceEpoch() - curr >= (qint64)msec ) {
+      return;
+    }
+  }
 }
 
 const QByteArray &

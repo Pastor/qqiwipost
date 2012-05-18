@@ -36,7 +36,7 @@ public:
 
   const QString &errorString() const;
 
-  void wait();
+  void wait(quint64 msec = -1);
 
 private:
   QiwiPostRequesterPrivate *d;

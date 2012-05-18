@@ -15,6 +15,8 @@ struct Error;
 struct QIWIPOSTSHARED_EXPORT Error {
     QString key;
     QString desc;
+    QString internalError;
+    QByteArray data;
     bool hasError;
 
     Error()
@@ -22,7 +24,9 @@ struct QIWIPOSTSHARED_EXPORT Error {
     {}
 
     Error(const Error &other)
-      : key(other.key), desc(other.desc), hasError(other.hasError)
+      : key(other.key), desc(other.desc), hasError(other.hasError),
+        internalError(other.internalError),
+        data(other.data)
     {}
 
     bool load(const QByteArray &data);
@@ -40,6 +44,39 @@ struct QIWIPOSTSHARED_EXPORT Status {
     {}
 
     void load(const QByteArray &data, Error &error);
+    const QString desc() const;
+};
+
+struct Price;
+typedef QList<Price>             PriceList;
+typedef QListIterator<Price>     PriceListIterator;
+
+struct QIWIPOSTSHARED_EXPORT PriceCollection {
+  QString onDeliveryPayment;
+  PriceList prices;
+
+  PriceCollection()
+  {}
+
+  PriceCollection(const PriceCollection &other)
+    : onDeliveryPayment(other.onDeliveryPayment),
+      prices(other.prices)
+  {}
+};
+
+struct QIWIPOSTSHARED_EXPORT Price {
+    QString type;
+    QString price;
+
+    Price()
+    {}
+
+    Price(const Price &other)
+      : type(other.type), price(other.price)
+    {}
+
+    void load(QXmlStreamReader &reader);
+    static const PriceCollection parseList(const QByteArray &data, Error &error);
 };
 
 struct Machine;
@@ -109,6 +146,8 @@ struct QIWIPOSTSHARED_EXPORT Package {
   QString preferedBoxMachineName;
   QString alternativeBoxMachineName;
   QString receiveremail;
+  QString id;
+  Error   error;
 
   Package()
   {}
@@ -123,7 +162,7 @@ struct QIWIPOSTSHARED_EXPORT Package {
       onDeliveryAmount(other.onDeliveryAmount),
       preferedBoxMachineName(other.preferedBoxMachineName),
       alternativeBoxMachineName(other.alternativeBoxMachineName),
-      receiveremail(other.receiveremail)
+      receiveremail(other.receiveremail), id(other.id), error(other.error)
   {}
   void                     load(QXmlStreamReader &reader);
   static const PackageCollection parseList(const QByteArray &data, Error &error);
@@ -133,19 +172,50 @@ struct Payment;
 typedef QList<Payment>             PaymentList;
 typedef QListIterator<Payment>     PaymentListIterator;
 
+struct QIWIPOSTSHARED_EXPORT PaymentCollection {
+    QString startDate;
+    QString endDate;
+    PaymentList payments;
+
+    PaymentCollection()
+    {}
+
+    PaymentCollection(const PaymentCollection &other)
+      : startDate(other.startDate), endDate(other.endDate),
+        payments(other.payments)
+    {}
+};
+
 struct QIWIPOSTSHARED_EXPORT Payment {
   QString amount;
   QString posdesc;
   QString packcode;
   QString transactionDate;
 
+  QString boxMachineName;
+  QString comissionForCod;
+  QString dateOfParceDelivered;
+  QString id;
+  QString parcelBarcode;
+  QString priceForDelivery;
+  QString receivedCod;
+
   Payment()
   {}
 
   Payment(const Payment &other)
     : amount(other.amount), posdesc(other.posdesc),
-      packcode(other.packcode), transactionDate(other.transactionDate)
+      packcode(other.packcode), transactionDate(other.transactionDate),
+
+
+      boxMachineName(other.boxMachineName), comissionForCod(other.comissionForCod),
+      dateOfParceDelivered(other.dateOfParceDelivered), id(other.id),
+      parcelBarcode(other.parcelBarcode), priceForDelivery(other.priceForDelivery),
+      receivedCod(other.receivedCod)
   {}
+
+  void                     load(QXmlStreamReader &reader);
+  static const PaymentCollection parseList(const QByteArray &data, Error &error);
 };
 
 
@@ -176,6 +246,7 @@ struct QIWIPOSTSHARED_EXPORT PackageReg {
   const QString toXml(int tab = 2) const;
 
   static const QString toXml(const PackageRegList &list, bool autoLabel = true, int tab = 2);
+  static const QString toXml(const QStringList packcodes, bool testPrintOut = true);
 
 };
 
@@ -213,6 +284,9 @@ struct QIWIPOSTSHARED_EXPORT Station {
       latitude(other.latitude), longitude(other.longitude)
   {}
 
+  void load(QXmlStreamReader &reader);
+  static const StationList parseList(const QByteArray &data, Error &error);
+
 };
 
 
@@ -225,5 +299,6 @@ Q_DECLARE_METATYPE(Qiwi::PackageReg)
 Q_DECLARE_METATYPE(Qiwi::Payment)
 Q_DECLARE_METATYPE(Qiwi::PackType)
 Q_DECLARE_METATYPE(Qiwi::Station)
+Q_DECLARE_METATYPE(Qiwi::Status)
 
 #endif // DAO_H

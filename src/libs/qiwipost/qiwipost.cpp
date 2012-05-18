@@ -46,7 +46,7 @@ namespace Internal {
   static const char * const QIWIPOST_URL = "qiwi.url";
   static const char * const QIWIPOST_USERNAME = "qiwi.username";
   static const char * const QIWIPOST_PASSWORD = "qiwi.password";
-  static const char * const QIWIPOST_VERSION = "qiwi.version";
+  static const char * const QIWIPOST_VERSION  = "qiwi.version";
   static const char * const QIWIPOST_LANGUAGE = "qiwi.language";
 }
 }
@@ -176,7 +176,7 @@ const MachineList
 QiwiPost::loadMachines(Error &error) {
   QueryParams params;
   d->requester.request("listmachines_xml", params, params);
-  d->requester.wait();
+  d->requester.wait(5000);
   if ( hasError() ) {
     qDebug() << errorString();
     return MachineList();
@@ -251,6 +251,25 @@ QiwiPost::loadLabel(const QString &packcode, Error &error, const QString &type) 
   return data;
 }
 
+const QByteArray
+QiwiPost::loadLabel(Error &error, const QString &packcode, const QString &customerRef) {
+  QueryParams gp;
+  QueryParams pp;
+
+  pp.insert("packcode", packcode.toLocal8Bit());
+  pp.insert("customerRef", customerRef.toLocal8Bit());
+  d->requester.request("setcustomerref", gp, pp);
+  d->requester.wait();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return QByteArray();
+  }
+  QByteArray data = d->requester.result();
+  if ( error.load(data) )
+    return QByteArray();
+  return data;
+}
+
 const QString
 QiwiPost::loadPackageStatus(const QString &packcode, Error &error) {
   QueryParams gp;
@@ -293,6 +312,143 @@ QiwiPost::loadPackages(Error &error,
     return PackageCollection();
   }
   return Package::parseList(d->requester.result(), error);
+}
+
+const PaymentCollection
+QiwiPost::loadPayments(Error &error,
+                       const QString &startDate,
+                       const QString &endDate) {
+  QueryParams gp;
+  QueryParams pp;
+
+  if ( !startDate.isEmpty() )
+    pp.insert("startdate", startDate.toLocal8Bit());
+  if ( !endDate.isEmpty() )
+    pp.insert("enddate", endDate.toLocal8Bit());
+  d->requester.request("getcodreport", gp, pp);
+  d->requester.wait();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return PaymentCollection();
+  }
+  return Payment::parseList(d->requester.result(), error);
+}
+
+const PackageList
+QiwiPost::registerPackage(Error &error, const PackageReg &reg) {
+  QueryParams gp;
+  QueryParams pp;
+
+  pp.insert("content", PackageReg::toXml(PackageRegList() << reg).toLocal8Bit());
+  d->requester.request("createdeliverypacks", gp, pp);
+  d->requester.wait();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return PackageList();
+  }
+  return Package::parseList(d->requester.result(), error).packages;
+}
+
+bool
+QiwiPost::unregisterPackage(Error &error, const QString &packcode) {
+  QueryParams gp;
+  QueryParams pp;
+
+  pp.insert("packcode", packcode.toLocal8Bit());
+  d->requester.request("change_packsize", gp, pp);
+  d->requester.wait();
+  QByteArray data = d->requester.result();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return false;
+  } else if ( error.load(data) ) {
+    return false;
+  }
+  return data.toInt() == 1;
+}
+
+bool
+QiwiPost::chanchePackageSize(Error &error, const QString &packcode, const QString &packsize) {
+  QueryParams gp;
+  QueryParams pp;
+
+  pp.insert("packcode", packcode.toLocal8Bit());
+  pp.insert("packsize", packsize.toLocal8Bit());
+  d->requester.request("cancelpack", gp, pp);
+  d->requester.wait();
+  QByteArray data = d->requester.result();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return false;
+  } else if ( error.load(data) ) {
+    return false;
+  }
+  return data.toInt() == 1;
+}
+
+bool
+QiwiPost::payPackage(Error &error, const QString &packcode) {
+  QueryParams gp;
+  QueryParams pp;
+
+  pp.insert("packcode", packcode.toLocal8Bit());
+  d->requester.request("payforpack", gp, pp);
+  d->requester.wait();
+  QByteArray data = d->requester.result();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return false;
+  } else if ( error.load(data) ) {
+    return false;
+  }
+  return data.toInt() == 1;
+}
+
+const QByteArray
+QiwiPost::confirmPackages(Error &error, const QStringList &packages, bool testPrint) {
+  QueryParams gp;
+  QueryParams pp;
+
+  pp.insert("content", PackageReg::toXml(packages, testPrint).toLocal8Bit());
+  d->requester.request("getconfirmprintout", gp, pp);
+  d->requester.wait();
+  QByteArray data = d->requester.result();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return QByteArray();
+  } else if ( error.load(data) ) {
+    return QByteArray();
+  }
+  return data;
+}
+
+const PriceCollection
+QiwiPost::listPrices(Error &error) {
+  QueryParams gp;
+  QueryParams pp;
+
+  d->requester.request("pricelist", gp, pp);
+  d->requester.wait();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return PriceCollection();
+  }
+  return Price::parseList(d->requester.result(), error);
+}
+
+const StationList
+QiwiPost::listStations(Error &error, const QString &town) {
+  QueryParams gp;
+  QueryParams pp;
+
+  gp.insert("town", town.toLocal8Bit());
+  d->requester.request("getallmetrostations", gp, pp);
+  d->requester.wait();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return StationList();
+  }
+  return Station::parseList(d->requester.result(), error);
 }
 
 bool

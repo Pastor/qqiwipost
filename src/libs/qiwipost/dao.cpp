@@ -2,6 +2,7 @@
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QTextStream>
+#include <QStringList>
 #include "dao.h"
 
 namespace Qiwi {
@@ -15,6 +16,7 @@ namespace Internal {
 
   static const char * const START = "paczkomaty";
   static const char * const ERROR = "error";
+  static const char * const CUSTOMER = "customer";
   static const char * const STATUS = "status";
   static const char * const KEY = "key";
   static const char * const MACHINE = "machine";
@@ -46,6 +48,26 @@ namespace Internal {
   static const char * const PREFEREDBOXMACHINENAME = "preferedboxmachinename";
   static const char * const ALTERNATIVEBOXMACHINENAME = "alternativeboxmachinename";
   static const char * const RECEIVERAMAIL = "receiveremail";
+
+  static const char * const PAYMENT = "payment";
+  static const char * const POSDESC = "posdesc";
+  static const char * const AMOUNT = "amount";
+  static const char * const TRANSACTIONDATE = "transactiondate";
+  static const char * const BOXMACHINENAME = "boxmachinename";
+  static const char * const COMISSIONFORCOD = "comissionforcod";
+  static const char * const DATEOFPARCELDELIVERED = "dateofparceldelivered";
+  static const char * const ID = "id";
+  static const char * const PARCELBARCODE = "parcelbarcode";
+  static const char * const PRICEFORDELIVERY = "pricefordelivery";
+  static const char * const RECEIVEDCOD = "receivedcod";
+
+  static const char * const TYPE = "type";
+  static const char * const PRICE = "price";
+  static const char * const PACKTYPE = "packtype";
+  static const char * const ONDELIVERYPAYMENT = "on_delivery_payment";
+
+  static const char * const STATION = "station";
+  static const char * const METROSTATIONSNAME = "metrostationsname";
 }
 }
 
@@ -62,6 +84,9 @@ Error::load(const QByteArray &data) {
     case QXmlStreamReader::StartElement: {
       QString element = reader.name().toString();
       if ( element == START ) {
+          //ignore
+      } else if ( element == CUSTOMER ) {
+          //ignore
       } else if ( element == ERROR ) {
         key = reader.attributes().value(KEY).toString();
         desc = reader.readElementText().trimmed();
@@ -76,11 +101,92 @@ Error::load(const QByteArray &data) {
     case QXmlStreamReader::Characters:
       break;
     default:
-      return false;
       break;
     }
   }
   return false;
+}
+
+/** struct Price */
+void
+Price::load(QXmlStreamReader &reader) {
+  QString element = reader.name().toString();
+  if ( element != PACKTYPE ) {
+    reader.raiseError("Illegal tag name");
+    return;
+  }
+  while (!reader.atEnd()) {
+    reader.readNext();
+    switch ( reader.tokenType() ) {
+    case QXmlStreamReader::StartElement: {
+      element = reader.name().toString();
+      if ( element == TYPE ) {
+        type = reader.readElementText().trimmed();
+      } else if ( element == PRICE ) {
+        price = reader.readElementText().trimmed();
+      }
+      break;
+    }
+    case QXmlStreamReader::EndElement:
+    case QXmlStreamReader::EndDocument:
+    case QXmlStreamReader::Comment:
+    case QXmlStreamReader::Characters:
+      break;
+    default:
+      break;
+    }
+  }
+}
+
+const PriceCollection
+Price::parseList(const QByteArray &data, Error &error) {
+  PriceList list;
+  QString onDeliveryPayment;
+  QXmlStreamReader reader(data);
+  while (!reader.atEnd()) {
+    reader.readNext();
+    switch (reader.tokenType()) {
+    case QXmlStreamReader::StartElement: {
+      QString element = reader.name().toString();
+      if ( element == START ) {
+        break;
+      } else if ( element == PACKTYPE ) {
+        Price price;
+        price.load(reader);
+        list.append(price);
+      } else if ( element == ONDELIVERYPAYMENT ) {
+        onDeliveryPayment = reader.readElementText().trimmed();
+      } else if ( element == ERROR ) {
+        error.key = reader.attributes().value(KEY).toString();
+        error.desc = reader.readElementText().trimmed();
+        error.hasError = true;
+      } else {
+        reader.raiseError(QString("Invalid element: %1").arg(element));
+      }
+      break;
+    }
+    case QXmlStreamReader::EndElement:
+    case QXmlStreamReader::EndDocument:
+    case QXmlStreamReader::Comment:
+    case QXmlStreamReader::Characters:
+      break;
+    default:
+      //reader.raiseError("Unexpected token");
+      break;
+    }
+  }
+  if (reader.hasError()) {
+    error.internalError = QObject::tr("Error parse data: %2, at line %3, column %4")
+                .arg(reader.errorString())
+                .arg(reader.lineNumber())
+                .arg(reader.columnNumber());
+    error.hasError = true;
+    error.data = data;
+  }
+  PriceCollection collection;
+  collection.onDeliveryPayment = onDeliveryPayment;
+  collection.prices = list;
+  return collection;
 }
 
 /** struct Status */
@@ -112,6 +218,12 @@ Status::load(const QByteArray &data, Error &error) {
     }
   }
 }
+
+const QString
+Status::desc() const {
+  return "";
+}
+
 /** struct Machine */
 MachineList
 Machine::parseList(const QByteArray &data, Error &error) {
@@ -147,10 +259,12 @@ Machine::parseList(const QByteArray &data, Error &error) {
     }
   }
   if (reader.hasError()) {
-    qDebug() << QObject::tr("Error parse data: %2, at line %3, column %4")
-                .arg(reader.errorString())
-                .arg(reader.lineNumber())
-                .arg(reader.columnNumber());
+      error.internalError = QObject::tr("Error parse data: %2, at line %3, column %4")
+                  .arg(reader.errorString())
+                  .arg(reader.lineNumber())
+                  .arg(reader.columnNumber());
+      error.hasError = true;
+      error.data = data;
   }
   return list;
 }
@@ -253,7 +367,13 @@ Package::load(QXmlStreamReader &reader) {
           alternativeBoxMachineName = reader.readElementText().trimmed();
         } else if ( element == RECEIVERAMAIL ) {
           receiveremail = reader.readElementText().trimmed();
-        } else {
+        } else if ( element == ID ) {
+          id = reader.readElementText().trimmed();
+        } else if ( element == ERROR ) {
+          error.key = reader.attributes().value(KEY).toString();
+          error.desc = reader.readElementText().trimmed();
+          error.hasError = true;
+        }  else {
           reader.raiseError(QString("Invalid element: %1").arg(element));
         }
         break;
@@ -300,10 +420,13 @@ Package::parseList(const QByteArray &data, Error &error) {
       } else if ( element == ERROR ) {
         error.key = reader.attributes().value(KEY).toString();
         error.desc = reader.readElementText().trimmed();
+        error.hasError = true;
       } else if ( element == RESULTS ) {
         int results = reader.readElementText().trimmed().toInt();
         if ( list.size() != results )
           qDebug() << "Why?";
+      } else if ( element == CUSTOMER ) {
+          //ignore
       } else {
         reader.raiseError(QString("Invalid element: %1").arg(element));
       }
@@ -319,16 +442,226 @@ Package::parseList(const QByteArray &data, Error &error) {
     }
   }
   if (reader.hasError()) {
-    qDebug() << QObject::tr("Error parse data: %2, at line %3, column %4")
-                .arg(reader.errorString())
-                .arg(reader.lineNumber())
-                .arg(reader.columnNumber());
+      error.internalError = QObject::tr("Error parse data: %2, at line %3, column %4")
+                  .arg(reader.errorString())
+                  .arg(reader.lineNumber())
+                  .arg(reader.columnNumber());
+      error.hasError = true;
+      error.data = data;
   }
   PackageCollection collection;
   collection.startDate = startDate;
   collection.endDate = endDate;
   collection.packages = list;
   return collection;
+}
+
+/** struct Payment */
+void
+Payment::load(QXmlStreamReader &reader) {
+  QString element = reader.name().toString();
+  if ( element != PAYMENT ) {
+    reader.raiseError("Illegal tag name");
+    return;
+  }
+  while ( !reader.atEnd() ) {
+    reader.readNext();
+    switch ( reader.tokenType() ) {
+      case QXmlStreamReader::StartElement: {
+        element = reader.name().toString();
+        if ( element == PACKCODE ) {
+          packcode = reader.readElementText().trimmed();
+        } else if ( element == AMOUNT ) {
+          amount = reader.readElementText().trimmed();
+        } else if ( element == POSDESC ) {
+          posdesc = reader.readElementText().trimmed();
+        } else if ( element == TRANSACTIONDATE ) {
+          transactionDate = reader.readElementText().trimmed();
+        } else if ( element == BOXMACHINENAME ) {
+          boxMachineName = reader.readElementText().trimmed();
+        } else if ( element == COMISSIONFORCOD ) {
+          comissionForCod = reader.readElementText().trimmed();
+        } else if ( element == DATEOFPARCELDELIVERED ) {
+          dateOfParceDelivered = reader.readElementText().trimmed();
+        } else if ( element == ID ) {
+          id = reader.readElementText().trimmed();
+        } else if ( element == PARCELBARCODE ) {
+          parcelBarcode = reader.readElementText().trimmed();
+        } else if ( element == PRICEFORDELIVERY ) {
+          priceForDelivery = reader.readElementText().trimmed();
+        } else if ( element == RECEIVEDCOD ) {
+          receivedCod = reader.readElementText().trimmed();
+        } else {
+          reader.raiseError(QString("Invalid element: %1").arg(element));
+        }
+        break;
+      }
+      case QXmlStreamReader::EndElement: {
+        element = reader.name().toString();
+        if ( element == PAYMENT ) {
+          return;
+        }
+        break;
+      }
+      case QXmlStreamReader::EndDocument:
+      case QXmlStreamReader::Comment:
+      case QXmlStreamReader::Characters:
+        break;
+      default:
+        reader.raiseError("Unexpected token");
+        break;
+    }
+  }
+}
+
+const PaymentCollection
+Payment::parseList(const QByteArray &data, Error &error) {
+  PaymentList list;
+  QString startDate;
+  QString endDate;
+  QXmlStreamReader reader(data);
+  while (!reader.atEnd()) {
+    reader.readNext();
+    switch (reader.tokenType()) {
+    case QXmlStreamReader::StartElement: {
+      QString element = reader.name().toString();
+      if ( element == START ) {
+        break;
+      } else if ( element == PAYMENT ) {
+        Payment payment;
+        payment.load(reader);
+        list.append(payment);
+      } else if ( element == STARTDATE ) {
+        startDate = reader.readElementText().trimmed();
+      } else if ( element == ENDDATE ) {
+        endDate = reader.readElementText().trimmed();
+      } else if ( element == ERROR ) {
+        error.key = reader.attributes().value(KEY).toString();
+        error.desc = reader.readElementText().trimmed();
+        error.hasError = true;
+      } else if ( element == RESULTS ) {
+        int results = reader.readElementText().trimmed().toInt();
+        if ( list.size() != results )
+          qDebug() << "Why?";
+      } else if ( element == CUSTOMER ) {
+          //ignore
+      } else {
+        reader.raiseError(QString("Invalid element: %1").arg(element));
+      }
+      break;
+    }
+    case QXmlStreamReader::EndElement:
+    case QXmlStreamReader::EndDocument:
+    case QXmlStreamReader::Comment:
+    case QXmlStreamReader::Characters:
+      break;
+    default:
+      break;
+    }
+  }
+  if (reader.hasError()) {
+      error.internalError = QObject::tr("Error parse data: %2, at line %3, column %4")
+                  .arg(reader.errorString())
+                  .arg(reader.lineNumber())
+                  .arg(reader.columnNumber());
+      error.hasError = true;
+      error.data = data;
+  }
+  PaymentCollection collection;
+  collection.startDate = startDate;
+  collection.endDate = endDate;
+  collection.payments = list;
+  return collection;
+}
+
+/** struct Station */
+void
+Station::load(QXmlStreamReader &reader) {
+  QString element = reader.name().toString();
+  if ( element != STATION ) {
+    reader.raiseError("Illegal tag name");
+    return;
+  }
+  while ( !reader.atEnd() ) {
+    reader.readNext();
+    switch ( reader.tokenType() ) {
+      case QXmlStreamReader::StartElement: {
+        element = reader.name().toString();
+        if ( element == METROSTATIONSNAME ) {
+          metroStationName = reader.readElementText().trimmed();
+        } else if ( element == TOWN ) {
+          town = reader.readElementText().trimmed();
+        } else if ( element == LATITUDE ) {
+          latitude = reader.readElementText().trimmed();
+        } else if ( element == LONGITUDE ) {
+          longitude = reader.readElementText().trimmed();
+        } else {
+          reader.raiseError(QString("Invalid element: %1").arg(element));
+        }
+        break;
+      }
+      case QXmlStreamReader::EndElement: {
+        element = reader.name().toString();
+        if ( element == STATION ) {
+          return;
+        }
+        break;
+      }
+      case QXmlStreamReader::EndDocument:
+      case QXmlStreamReader::Comment:
+      case QXmlStreamReader::Characters:
+        break;
+      default:
+        reader.raiseError("Unexpected token");
+        break;
+    }
+  }
+}
+
+const StationList
+Station::parseList(const QByteArray &data, Error &error) {
+  StationList list;
+  QXmlStreamReader reader(data);
+  while (!reader.atEnd()) {
+    reader.readNext();
+    switch (reader.tokenType()) {
+    case QXmlStreamReader::StartElement: {
+      QString element = reader.name().toString();
+      if ( element == START ) {
+        break;
+      } else if ( element == STATION ) {
+        Station station;
+        station.load(reader);
+        list.append(station);
+      } else if ( element == ERROR ) {
+        error.key = reader.attributes().value(KEY).toString();
+        error.desc = reader.readElementText().trimmed();
+        error.hasError = true;
+      } else if ( element == CUSTOMER ) {
+          //ignore
+      } else {
+        reader.raiseError(QString("Invalid element: %1").arg(element));
+      }
+      break;
+    }
+    case QXmlStreamReader::EndElement:
+    case QXmlStreamReader::EndDocument:
+    case QXmlStreamReader::Comment:
+    case QXmlStreamReader::Characters:
+      break;
+    default:
+      break;
+    }
+  }
+  if (reader.hasError()) {
+      error.internalError = QObject::tr("Error parse data: %2, at line %3, column %4")
+                  .arg(reader.errorString())
+                  .arg(reader.lineNumber())
+                  .arg(reader.columnNumber());
+      error.hasError = true;
+      error.data = data;
+  }
+  return list;
 }
 
 /** struct PackageReg */
@@ -361,6 +694,21 @@ PackageReg::toXml(const PackageRegList &list, bool autoLabel, int tab) {
   while ( it.hasNext() ) {
     const PackageReg reg = it.next();
     stream << reg.toXml(tab);
+  }
+  stream << "</paczkomaty>";
+  return result;
+}
+
+const QString
+PackageReg::toXml(const QStringList packcodes, bool testPrintOut) {
+  QString result;
+  QTextStream stream(&result);
+
+  stream << "<paczkomaty>";
+  stream << "<testprintout>" << (testPrintOut ? "1" : "0") << "<testprintout>";
+  QStringListIterator it(packcodes);
+  while ( it.hasNext() ) {
+    stream << "<pack>" << "<packcode>" << it.next() << "</packcode>" << "</pack>";
   }
   stream << "</paczkomaty>";
   return result;
