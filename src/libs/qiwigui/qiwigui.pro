@@ -14,7 +14,10 @@ SOURCES += qiwigui.cpp \
     qiwierrorview.cpp \
     qiwipostmain.cpp \
     qiwiposttabs.cpp \
-    qiwipostpackageview.cpp
+    qiwipostpackageview.cpp \
+    qiwipostsettings.cpp \
+    qiwipostsendpackages.cpp \
+    qiwipostregisterpackage.cpp
 
 HEADERS += qiwigui.h\
         qiwigui_global.h \
@@ -23,14 +26,20 @@ HEADERS += qiwigui.h\
     qiwierrorview.h \
     qiwipostmain.h \
     qiwiposttabs.h \
-    qiwipostpackageview.h
+    qiwipostpackageview.h \
+    qiwipostsettings.h \
+    qiwipostsendpackages.h \
+    qiwipostregisterpackage.h
 
 FORMS += \
     qiwiguimachineview.ui \
     qiwierrorview.ui \
     qiwipostmain.ui \
     qiwiposttabs.ui \
-    qiwipostpackageview.ui
+    qiwipostpackageview.ui \
+    qiwipostsettings.ui \
+    qiwipostsendpackages.ui \
+    qiwipostregisterpackage.ui
 
 RESOURCES += \
     resource.qrc

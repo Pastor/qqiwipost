@@ -14,6 +14,7 @@ class QIWIGUISHARED_EXPORT QiwiGuiUtils {
     static const QImage pdf2image(const QByteArray &data);
     static void pdfView(const QByteArray &data);
     static void show(Error &error, QWidget *parent = 0);
+    static void setToolStyle(QWidget *widget);
 };
 
 }

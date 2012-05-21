@@ -167,7 +167,7 @@ QiwiPostMachineTableModel::rowAt(int index) const {
 
 
 QiwiPostPackageTableModel::QiwiPostPackageTableModel(QObject *parent)
-  : QAbstractTableModel(parent) {
+  : QAbstractTableModel(parent), checkable(true) {
   columns.append(trUtf8("PackCode"));
   columns.append(trUtf8("PackSize"));
   columns.append(trUtf8("AmountCharged"));
@@ -236,7 +236,7 @@ QiwiPostPackageTableModel::data(const QModelIndex &index, int role) const {
     } else if ( column == trUtf8("LabelCreationDate") ) {
       return package.labelCreationDate;
     } else if ( column == trUtf8("Status") ) {
-      return package.status;
+      return QObject::trUtf8(package.status.toAscii());
     } else if ( column == trUtf8("ConfirmPrinted") ) {
       return package.isConfPrinted;
     } else if ( column == trUtf8("LabelPrinted") ) {
@@ -287,6 +287,12 @@ Qt::ItemFlags
 QiwiPostPackageTableModel::flags(const QModelIndex &index) const {
     if ( !index.isValid() )
         return 0;
+    if ( checkable ) {
+      return (Qt::ItemIsDragEnabled |
+              Qt::ItemIsSelectable |
+              Qt::ItemIsEnabled |
+              Qt::ItemIsUserCheckable);
+    }
     return (Qt::ItemIsDragEnabled | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
@@ -295,6 +301,13 @@ QiwiPostPackageTableModel::load(const PackageList &list) {
   beginResetModel();
   packages.clear();
   packages.append(list);
+  endResetModel();
+}
+
+void
+QiwiPostPackageTableModel::reset() {
+  beginResetModel();
+  packages.clear();
   endResetModel();
 }
 

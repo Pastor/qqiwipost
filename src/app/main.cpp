@@ -23,7 +23,7 @@
 //#include <qiwipost/qiwipostrequester.h>
 
 //#include <qiwipost/qiwipost.h>
-//#include <qiwigui/qiwigui.h>
+#include <qiwigui/qiwigui.h>
 #include <qiwigui/qiwipostmain.h>
 
 static inline QDir
@@ -83,7 +83,11 @@ main(int argc, char **argv) {
     Qiwi::QiwiPostMain *pmain = new Qiwi::QiwiPostMain();
     pmain->loadSettings(shareDir.absoluteFilePath("qiwipost.db"));
     pmain->applaySettings();
+    shareDir.cdUp();
+    shareDir.cd("plugins");
+    QApplication::addLibraryPath(shareDir.absolutePath());
     pmain->setWindowState(Qt::WindowMaximized);
+    //Qiwi::QiwiGuiUtils::setToolStyle(pmain);
     pmain->show();
     pmain->reload();
     int result = app.exec();

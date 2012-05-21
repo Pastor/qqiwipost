@@ -58,7 +58,7 @@ QiwiPostRequesterPrivate::finished(QNetworkReply *replay) {
   replayHeaders.clear();
   result = replay->readAll();
   replayHeaders = replay->rawHeaderPairs();
-  qDebug() << result;
+  //qDebug() << result;
   if ( replay->error() != QNetworkReply::NoError )
     error = replay->errorString();
   workComplete = true;

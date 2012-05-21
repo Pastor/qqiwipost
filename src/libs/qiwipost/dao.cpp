@@ -456,6 +456,74 @@ Package::parseList(const QByteArray &data, Error &error) {
   return collection;
 }
 
+const QString
+Package::packageDesc(const Package &package) {
+  if ( "Created" == package.status ) {
+    return QObject::trUtf8("Created");
+  } else if ( "Prepared" == package.status ) {
+    return QObject::trUtf8("Prepared");
+  } else if ( "Sent" == package.status ) {
+    return QObject::trUtf8("Sent");
+  } else if ( "InTransit" == package.status ) {
+    return QObject::trUtf8("InTransit");
+  } else if ( "Stored" == package.status ) {
+    return QObject::trUtf8("Stored");
+  } else if ( "Delivered" == package.status ) {
+    return QObject::trUtf8("Delivered");
+  } else if ( "Avizo" == package.status ) {
+    return QObject::trUtf8("Avizo");
+  } else if ( "Expired" == package.status ) {
+    return QObject::trUtf8("Expired");
+  } else if ( "ReturnedToAgency" == package.status ) {
+    return QObject::trUtf8("ReturnedToAgency");
+  } else if ( "DeliveredToAgency" == package.status ) {
+    return QObject::trUtf8("DeliveredToAgency");
+  } else if ( "ReturnedToSortingCenter" == package.status ) {
+    return QObject::trUtf8("ReturnedToSortingCenter");
+  } else if ( "DeliveredToSortingCenter" == package.status ) {
+    return QObject::trUtf8("DeliveredToSortingCenter");
+  } else if ( "ReturnedTosender" == package.status ) {
+    return QObject::trUtf8("ReturnedTosender");
+  } else if ( "Cancelled" == package.status ) {
+    return QObject::trUtf8("Cancelled");
+  }
+  return QObject::trUtf8("Unknown");
+}
+
+const QString
+Package::packageStatus(const Package &package) {
+  if ( "Created" == package.status ) {
+    return QObject::trUtf8("Created");
+  } else if ( "Prepared" == package.status ) {
+    return QObject::trUtf8("Prepared");
+  } else if ( "Sent" == package.status ) {
+    return QObject::trUtf8("Sent");
+  } else if ( "InTransit" == package.status ) {
+    return QObject::trUtf8("InTransit");
+  } else if ( "Stored" == package.status ) {
+    return QObject::trUtf8("Stored");
+  } else if ( "Delivered" == package.status ) {
+    return QObject::trUtf8("Delivered");
+  } else if ( "Avizo" == package.status ) {
+    return QObject::trUtf8("Avizo");
+  } else if ( "Expired" == package.status ) {
+    return QObject::trUtf8("Expired");
+  } else if ( "ReturnedToAgency" == package.status ) {
+    return QObject::trUtf8("ReturnedToAgency");
+  } else if ( "DeliveredToAgency" == package.status ) {
+    return QObject::trUtf8("DeliveredToAgency");
+  } else if ( "ReturnedToSortingCenter" == package.status ) {
+    return QObject::trUtf8("ReturnedToSortingCenter");
+  } else if ( "DeliveredToSortingCenter" == package.status ) {
+    return QObject::trUtf8("DeliveredToSortingCenter");
+  } else if ( "ReturnedTosender" == package.status ) {
+    return QObject::trUtf8("ReturnedTosender");
+  } else if ( "Cancelled" == package.status ) {
+    return QObject::trUtf8("Cancelled");
+  }
+  return QObject::trUtf8("Unknown");
+}
+
 /** struct Payment */
 void
 Payment::load(QXmlStreamReader &reader) {

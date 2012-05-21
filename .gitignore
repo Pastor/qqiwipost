@@ -29,3 +29,5 @@ Makefile*
 
 # Qt Creator
 *.pro.user
+# Releases
+releases

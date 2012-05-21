@@ -5,9 +5,11 @@
 #include <QTableView>
 #include <qiwipost/qiwipost.h>
 #include "qiwiguimodel.h"
-#include "qiwiguimachineview.h"
 #include "qiwipostpackageview.h"
 #include "qiwiposttabs.h"
+#include "qiwipostsettings.h"
+#include "qiwipostsendpackages.h"
+#include "qiwipostregisterpackage.h"
 #include "qiwigui_global.h"
 
 namespace Ui {
@@ -31,14 +33,22 @@ class QIWIGUISHARED_EXPORT QiwiPostMain : public QMainWindow {
     void selectMachines();
   protected slots:
     void currentRowChanged(const QModelIndex &current, const QModelIndex &previous);
+    void showSettings();
+    void showSendPackages();
+    void showRegisterPackage();
+    void showEditPackage();
+    void showUnregisterPackage();
   private:
     Ui::QiwiPostMain *ui;
-    QiwiGuiMachineView *mw;
     QiwiPostPackageTableModel *pm;
     QTableView       *tvPackages;
     QiwiPost         *post;
     QiwiPostTabs     *tabs;
     QiwiPostPackageView *packView;
+    QiwiPostSettings *qps;
+    QiwiPostSendPackages *qsp;
+    QiwiPostRegisterPackage *qrp;
+    Package           currentPackage;
 };
 
 }

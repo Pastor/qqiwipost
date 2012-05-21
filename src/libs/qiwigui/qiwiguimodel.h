@@ -56,9 +56,11 @@ public:
 
   void load(const PackageList &list);
   const Package rowAt(int index) const;
+  void reset();
 private:
   PackageList        packages;
   QStringList        columns;
+  bool               checkable;
 };
 
 }

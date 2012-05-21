@@ -52,10 +52,22 @@ public:
 
   const StationList       listStations(Error &error, const QString &town);
 
+
+  const PurchaseList      listInternalPurchases();
+  const Purchase          internalPurchases(const QString &id);
+  const Purchase          createPurchase(const Purchase &purchase);
+  bool                    removeInternalPurchase(const QString &id);
+
   bool hasError() const;
 
   const QString &errorString() const;
-
+public:
+  static const char * const QIWIPOST_URL;
+  static const char * const QIWIPOST_USERNAME;
+  static const char * const QIWIPOST_PASSWORD;
+  static const char * const QIWIPOST_VERSION;
+  static const char * const QIWIPOST_LANGUAGE;
+  static const char * const QIWIPOST_TIMEOUT;
 private:
   QiwiPostPrivate *d;
 };

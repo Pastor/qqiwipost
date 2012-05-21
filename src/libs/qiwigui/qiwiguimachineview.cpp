@@ -10,7 +10,7 @@ QiwiGuiMachineView::QiwiGuiMachineView(QWidget *parent)
     mm(new QiwiPostMachineTableModel(this)) {
   ui->setupUi(this);
   ui->tvMachines->setModel(mm);
-  setToolStyle(this);
+  QiwiGuiUtils::setToolStyle(this);
   connect(ui->pbSelect, SIGNAL(clicked()), this, SLOT(select()));
   connect(ui->tvMachines->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
           this, SLOT(currentRowChanged(QModelIndex,QModelIndex)));

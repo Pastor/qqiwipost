@@ -11,6 +11,26 @@ class QXmlStreamReader;
 
 namespace Qiwi {
 
+struct Purchase;
+struct QIWIPOSTSHARED_EXPORT Purchase {
+    QString fname;
+    QString sname;
+    QString phone;
+    QString customerRef;
+    QString id;
+
+    Purchase()
+    {}
+
+    Purchase(const Purchase &other)
+      : fname(other.fname), sname(other.sname),
+        phone(other.phone), id(other.id),
+        customerRef(other.customerRef)
+    {}
+};
+typedef QList<Purchase>             PurchaseList;
+typedef QListIterator<Purchase>     PurchaseListIterator;
+
 struct Error;
 struct QIWIPOSTSHARED_EXPORT Error {
     QString key;
@@ -146,6 +166,7 @@ struct QIWIPOSTSHARED_EXPORT Package {
   QString preferedBoxMachineName;
   QString alternativeBoxMachineName;
   QString receiveremail;
+  QString customerRef;
   QString id;
   Error   error;
 
@@ -162,10 +183,13 @@ struct QIWIPOSTSHARED_EXPORT Package {
       onDeliveryAmount(other.onDeliveryAmount),
       preferedBoxMachineName(other.preferedBoxMachineName),
       alternativeBoxMachineName(other.alternativeBoxMachineName),
-      receiveremail(other.receiveremail), id(other.id), error(other.error)
+      receiveremail(other.receiveremail), customerRef(other.customerRef),
+      id(other.id), error(other.error)
   {}
   void                     load(QXmlStreamReader &reader);
   static const PackageCollection parseList(const QByteArray &data, Error &error);
+  static const QString     packageStatus(const Package &package);
+  static const QString     packageDesc(const Package &package);
 };
 
 struct Payment;

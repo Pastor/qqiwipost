@@ -1,3 +1,5 @@
+
+#include <QDateTime>
 #include "qiwipostpackageview.h"
 #include "ui_qiwipostpackageview.h"
 
@@ -31,7 +33,8 @@ QiwiPostPackageView::load(QiwiPost *post, const Package &p) {
   ui->leAltMachineName->setText(p.alternativeBoxMachineName);
   ui->leAmountCharge->setText(p.amountCharged);
   ui->leCalculatedCharge->setText(p.calculatedChargeAmount);
-  ui->leCreationDate->setText(p.creationDate);
+  QDateTime createdDate = QDateTime::fromString(p.creationDate, Qt::ISODate);
+  ui->leCreationDate->setText(createdDate.toString("dd.MM.yyyy hh:MM:ss"));
   ui->leDeliveryAmount->setText(p.onDeliveryAmount);
   ui->leFirstName->setText("");
   ui->leId->setText("");
@@ -41,19 +44,34 @@ QiwiPostPackageView::load(QiwiPost *post, const Package &p) {
   ui->lePaymentStatus->setText(p.paymentStatus);
   ui->lePhone->setText(p.receiveremail);
   ui->leSecondName->setText("");
-  ui->leStatus->setText(p.status);
+  const QString status = Package::packageStatus(p);
+  ui->leStatus->setText(status);
+  ui->leStatus->setToolTip(status);
   ui->cbConfirm->setCurrentIndex( p.isConfPrinted.toInt() );
   ui->cbLabelCreated->setCurrentIndex( p.labelPrinted.toInt() );
+
+  for (int i = 0; i < ui->cbPackSize->count(); ++i) {
+    if ( ui->cbPackSize->itemText(i) == p.packsize ) {
+      ui->cbPackSize->setCurrentIndex(i);
+      break;
+    }
+  }
+
+  Purchase purchase = post->internalPurchases(p.id);
+  ui->leFirstName->setText(purchase.fname);
+  ui->leSecondName->setText(purchase.sname);
   setEnabledElements(false);
 }
 
 const Package
 QiwiPostPackageView::package(QiwiPost *post) const {
+  Q_UNUSED(post);
   return Package();
 }
 
 const PackageReg
 QiwiPostPackageView::packageReg(QiwiPost *post) const {
+  Q_UNUSED(post);
   return PackageReg();
 }
 
@@ -65,6 +83,7 @@ QiwiPostPackageView::preinit(QiwiPost *post) {
   Error error;
   const PriceCollection c = post->listPrices(error);
   if ( error.hasError ) {
+    ui->cbPackSize->addItems(QStringList() << "A" << "B" << "C");
     ui->cbPackSize->setEditable(true);
     return;
   }

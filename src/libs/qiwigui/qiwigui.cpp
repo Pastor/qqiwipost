@@ -5,12 +5,25 @@
 #include "qiwierrorview.h"
 #include "qiwigui.h"
 
+#if defined(Q_OS_WIN)
+#include <windows.h>
+#endif
+
 //#include <poppler/qt4/poppler-qt4.h>
 
 using namespace Qiwi;
 
+void
+QiwiGuiUtils::setToolStyle(QWidget *widget) {
+#if defined(Q_OS_WIN)
+  LONG exStyle = GetWindowLong(widget->winId(), GWL_EXSTYLE);
+  SetWindowLong( widget->winId(), GWL_EXSTYLE, exStyle | WS_EX_TOOLWINDOW );
+#endif
+}
+
 const QImage
 QiwiGuiUtils::pdf2image(const QByteArray &data) {
+  Q_UNUSED(data);
 //  QImage result;
 //  Poppler::Document *doc = Poppler::Document::loadFromData(data);
 //  if ( doc == 0 || doc->isLocked() ) {

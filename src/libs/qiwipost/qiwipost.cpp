@@ -28,10 +28,9 @@ namespace Internal {
 
   const QStringList schema = QStringList()
       << "CREATE TABLE `properties`("
-         "  `uid`   AUTOINC,"
          "  `key`   TEXT NOT NULL,"
          "  `value` TEXT DEFAULT NULL,"
-         "  PRIMARY KEY(`uid`)"
+         "  PRIMARY KEY(`key`)"
          ")"
       << "INSERT INTO `properties`(`key`, `value`)"
          "  VALUES('qiwi.url', 'http://apitest.qiwipost.ru/')"
@@ -44,13 +43,13 @@ namespace Internal {
       << "INSERT INTO `properties`(`key`, `value`)"
          "  VALUES('qiwi.language', 'RU')"
       << "INSERT INTO `properties`(`key`, `value`)"
-         "  VALUES('qiwi.timeout', '20000')";
-  static const char * const QIWIPOST_URL = "qiwi.url";
-  static const char * const QIWIPOST_USERNAME = "qiwi.username";
-  static const char * const QIWIPOST_PASSWORD = "qiwi.password";
-  static const char * const QIWIPOST_VERSION  = "qiwi.version";
-  static const char * const QIWIPOST_LANGUAGE = "qiwi.language";
-  static const char * const QIWIPOST_TIMEOUT  = "qiwi.timeout";
+         "  VALUES('qiwi.timeout', '20000')"
+      << "CREATE TABLE `purchase`("
+         "  `fname`  TEXT DEFAULT NULL,"
+         "  `sname`  TEXT DEFAULT NULL,"
+         "  `phone`  TEXT NOT NULL,"
+         "  `customerRef`  TEXT DEFAULT NULL"
+         ")";
 }
 }
 
@@ -99,6 +98,14 @@ QiwiPostPrivate::~QiwiPostPrivate() {
 }
 
 /** class QiwiPost */
+const char * const QiwiPost::QIWIPOST_URL = "qiwi.url";
+const char * const QiwiPost::QIWIPOST_USERNAME = "qiwi.username";
+const char * const QiwiPost::QIWIPOST_PASSWORD = "qiwi.password";
+const char * const QiwiPost::QIWIPOST_VERSION  = "qiwi.version";
+const char * const QiwiPost::QIWIPOST_LANGUAGE = "qiwi.language";
+const char * const QiwiPost::QIWIPOST_TIMEOUT  = "qiwi.timeout";
+
+
 QiwiPost::QiwiPost(QObject *parent)
   : QObject(parent), d(new QiwiPostPrivate){
 }
@@ -466,7 +473,10 @@ QiwiPost::confirmPackages(Error &error, const QStringList &packages, bool testPr
   QueryParams gp;
   QueryParams pp;
 
-  pp.insert("content", PackageReg::toXml(packages, testPrint).toLocal8Bit());
+  const QString confirmContent = PackageReg::toXml(packages, testPrint);
+  qDebug() << confirmContent;
+
+  pp.insert("content", confirmContent.toLocal8Bit());
   d->requester.request("getconfirmprintout", gp, pp);
   d->requester.wait();
   QByteArray data = d->requester.result();
@@ -518,6 +528,82 @@ QiwiPost::listStations(Error &error, const QString &town) {
     return StationList();
   }
   return Station::parseList(d->requester.result(), error);
+}
+
+const PurchaseList
+QiwiPost::listInternalPurchases() {
+  QSqlQuery q(d->db);
+  PurchaseList result;
+
+  if ( !q.exec("SELECT `uid`, `fname`, `sname`, `phone` FROM `purchase`") ) {
+    qDebug() << q.lastError().text();
+    return result;
+  }
+  while ( q.next() ) {
+    Purchase purchase;
+    purchase.id = q.value(0).toString();
+    purchase.fname = q.value(1).toString();
+    purchase.sname = q.value(2).toString();
+    purchase.phone = q.value(3).toString();
+    result << purchase;
+  }
+  return result;
+}
+
+const Purchase
+QiwiPost::internalPurchases(const QString &id) {
+  QSqlQuery q(d->db);
+  Purchase result;
+
+  if ( !q.prepare("SELECT rowid, `fname`, `sname`, `phone` FROM `purchase` WHERE rowid = :uid") ) {
+    qDebug() << q.lastError().text();
+    return result;
+  }
+  q.bindValue(":uid", id);
+  if ( !q.exec() ) {
+    qDebug() << q.lastError().text();
+    return result;
+  }
+  if ( q.next() ) {
+    result.id = q.value(0).toString();
+    result.fname = q.value(1).toString();
+    result.sname = q.value(2).toString();
+    result.phone = q.value(3).toString();
+  }
+  return result;
+}
+
+bool
+QiwiPost::removeInternalPurchase(const QString &id) {
+  QSqlQuery q(d->db);
+  if ( !q.prepare("DELETE FROM `purchase` WHERE rowid = :uid") ) {
+    qDebug() << q.lastError().text();
+    return false;
+  }
+  q.bindValue(":uid", id);
+  return q.exec();
+}
+
+const Purchase
+QiwiPost::createPurchase(const Purchase &purchase) {
+  Purchase result(purchase);
+  QSqlQuery q(d->db);
+
+  if ( !q.prepare("INSERT INTO `purchase`(`fname`, `sname`, `phone`, `customerRef`) "
+                  "VALUES(:fname, :sname, :phone, :customerRef)") ) {
+    qDebug() << q.lastError().text();
+    return result;
+  }
+  q.bindValue(":fname", purchase.fname);
+  q.bindValue(":sname", purchase.sname);
+  q.bindValue(":phone", purchase.phone);
+  q.bindValue(":customerRef", purchase.customerRef);
+  if ( !q.exec() ) {
+    qDebug() << q.lastError().text();
+    return result;
+  }
+  result.id = q.lastInsertId().toString();
+  return result;
 }
 
 bool
