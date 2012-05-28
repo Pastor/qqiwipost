@@ -387,6 +387,7 @@ QiwiPost::registerPackage(Error &error, const PackageReg &reg) {
   QueryParams gp;
   QueryParams pp;
 
+  qDebug() << PackageReg::toXml(PackageRegList() << reg);
   pp.insert("content", PackageReg::toXml(PackageRegList() << reg).toLocal8Bit());
   d->requester.request("createdeliverypacks", gp, pp);
   d->requester.wait();

@@ -115,6 +115,7 @@ struct QIWIPOSTSHARED_EXPORT Machine {
   QString province;
   QString status;
   QString operatinghours;
+  QString citygroup;
 
   Machine()
   {}
@@ -125,7 +126,7 @@ struct QIWIPOSTSHARED_EXPORT Machine {
       town(other.town), latitude(other.latitude),
       longitude(other.longitude), locationDesc(other.locationDesc),
       province(other.province), status(other.status),
-      operatinghours(other.operatinghours)
+      operatinghours(other.operatinghours), citygroup(other.citygroup)
   {}
 
   void               load(QXmlStreamReader &reader);

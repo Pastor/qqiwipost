@@ -31,3 +31,5 @@ Makefile*
 *.pro.user
 # Releases
 releases
+
+*.db

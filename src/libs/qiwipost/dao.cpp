@@ -20,6 +20,7 @@ namespace Internal {
   static const char * const STATUS = "status";
   static const char * const KEY = "key";
   static const char * const MACHINE = "machine";
+  static const char * const CITYGROUP = "citygroup";
   static const char * const NAME = "name";
   static const char * const PROVINCE = "province";
   static const char * const POSTCODE = "postcode";
@@ -303,6 +304,8 @@ Machine::load(QXmlStreamReader &reader) {
           status = reader.readElementText().trimmed();
         } else if ( element == OPERATINGHOURS ) {
           operatinghours = reader.readElementText().trimmed();
+        } else if ( element == CITYGROUP ) {
+          citygroup = reader.readElementText().trimmed();
         } else {
           reader.raiseError(QString("Invalid element: %1").arg(element));
         }
@@ -740,7 +743,7 @@ PackageReg::toXml(int tab) const {
   writer.setAutoFormattingIndent(tab);
   writer.writeStartElement("pack");
   private_writeElement(writer, "id", id);
-  private_writeElement(writer, "adreseePhoneNumber", addressPhoneNumber);
+  private_writeElement(writer, "addressPhoneNumber", addressPhoneNumber);
   private_writeElement(writer, "senderPhoneNumber", senderPhoneNumber);
   private_writeElement(writer, "boxMachineName", boxMachineName);
   private_writeElement(writer, "packType", packType);
