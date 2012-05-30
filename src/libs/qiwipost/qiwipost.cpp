@@ -48,6 +48,7 @@ namespace Internal {
          "  `fname`  TEXT DEFAULT NULL,"
          "  `sname`  TEXT DEFAULT NULL,"
          "  `phone`  TEXT NOT NULL,"
+         "  `code`   TEXT DEFAULT NULL,"
          "  `customerRef`  TEXT DEFAULT NULL"
          ")";
 }
@@ -259,14 +260,14 @@ QiwiPost::loadMachinesByName(const QString &name, Error &error) {
 }
 
 const QByteArray
-QiwiPost::loadLabel(const QString &packcode, Error &error, const QString &type) {
+QiwiPost::loadLabel(Error &error, const QString &packcode, const QString &type) {
   QueryParams gp;
   QueryParams pp;
 
-  if ( !packcode.isEmpty() )
-    pp.insert("packcode", packcode.toLocal8Bit());
+  //qDebug() << packcode.toUtf8();
+  pp.insert("packcode", packcode.toUtf8());
   if ( !type.isEmpty() )
-    pp.insert("labelType", type.toLocal8Bit());
+    pp.insert("labelType", type.toUtf8());
   d->requester.request("getsticker", gp, pp);
   d->requester.wait();
   if ( hasError() ) {
@@ -283,28 +284,28 @@ QiwiPost::loadLabel(const QString &packcode, Error &error, const QString &type) 
   return data;
 }
 
-const QByteArray
-QiwiPost::loadLabel(Error &error, const QString &packcode, const QString &customerRef) {
-  QueryParams gp;
-  QueryParams pp;
+//const QByteArray
+//QiwiPost::loadLabel(Error &error, const QString &packcode, const QString &customerRef) {
+//  QueryParams gp;
+//  QueryParams pp;
 
-  pp.insert("packcode", packcode.toLocal8Bit());
-  pp.insert("customerRef", customerRef.toLocal8Bit());
-  d->requester.request("setcustomerref", gp, pp);
-  d->requester.wait();
-  if ( hasError() ) {
-    qDebug() << errorString();
-    return QByteArray();
-  } else if ( d->requester.isTimeout() ) {
-    error.desc = QObject::trUtf8("Timeout");
-    error.hasError = true;
-    return QByteArray();
-  }
-  QByteArray data = d->requester.result();
-  if ( error.load(data) )
-    return QByteArray();
-  return data;
-}
+//  pp.insert("packcode", packcode.toLocal8Bit());
+//  pp.insert("customerRef", customerRef.toLocal8Bit());
+//  d->requester.request("setcustomerref", gp, pp);
+//  d->requester.wait();
+//  if ( hasError() ) {
+//    qDebug() << errorString();
+//    return QByteArray();
+//  } else if ( d->requester.isTimeout() ) {
+//    error.desc = QObject::trUtf8("Timeout");
+//    error.hasError = true;
+//    return QByteArray();
+//  }
+//  QByteArray data = d->requester.result();
+//  if ( error.load(data) )
+//    return QByteArray();
+//  return data;
+//}
 
 const QString
 QiwiPost::loadPackageStatus(const QString &packcode, Error &error) {
@@ -387,8 +388,7 @@ QiwiPost::registerPackage(Error &error, const PackageReg &reg) {
   QueryParams gp;
   QueryParams pp;
 
-  qDebug() << PackageReg::toXml(PackageRegList() << reg);
-  pp.insert("content", PackageReg::toXml(PackageRegList() << reg).toLocal8Bit());
+  pp.insert("content", PackageReg::toXml(PackageRegList() << reg).toUtf8());
   d->requester.request("createdeliverypacks", gp, pp);
   d->requester.wait();
   if ( hasError() ) {
@@ -399,7 +399,7 @@ QiwiPost::registerPackage(Error &error, const PackageReg &reg) {
     error.hasError = true;
     return PackageList();
   }
-  return Package::parseList(d->requester.result(), error).packages;
+  return Package::parseList( d->requester.result(), error ).packages;
 }
 
 bool
@@ -408,7 +408,7 @@ QiwiPost::unregisterPackage(Error &error, const QString &packcode) {
   QueryParams pp;
 
   pp.insert("packcode", packcode.toLocal8Bit());
-  d->requester.request("change_packsize", gp, pp);
+  d->requester.request("cancelpack", gp, pp);
   d->requester.wait();
   QByteArray data = d->requester.result();
   if ( hasError() ) {
@@ -431,7 +431,7 @@ QiwiPost::chanchePackageSize(Error &error, const QString &packcode, const QStrin
 
   pp.insert("packcode", packcode.toLocal8Bit());
   pp.insert("packsize", packsize.toLocal8Bit());
-  d->requester.request("cancelpack", gp, pp);
+  d->requester.request("change_packsize", gp, pp);
   d->requester.wait();
   QByteArray data = d->requester.result();
   if ( hasError() ) {
@@ -447,12 +447,35 @@ QiwiPost::chanchePackageSize(Error &error, const QString &packcode, const QStrin
   return data.toInt() == 1;
 }
 
+const QByteArray
+QiwiPost::changePackageCustomerRef(Error &error, const QString &packcode, const QString &customerRef) {
+  QueryParams gp;
+  QueryParams pp;
+
+  pp.insert("packcode", packcode.toUtf8());
+  pp.insert("customerRef", customerRef.toUtf8());
+  d->requester.request("setcustomerref", gp, pp);
+  d->requester.wait();
+  QByteArray data = d->requester.result();
+  if ( hasError() ) {
+    qDebug() << errorString();
+    return false;
+  } else if ( d->requester.isTimeout() ) {
+    error.desc = QObject::trUtf8("Timeout");
+    error.hasError = true;
+    return QByteArray();
+  } else if ( error.load(data) ) {
+    return QByteArray();
+  }
+  return data;
+}
+
 bool
 QiwiPost::payPackage(Error &error, const QString &packcode) {
   QueryParams gp;
   QueryParams pp;
 
-  pp.insert("packcode", packcode.toLocal8Bit());
+  pp.insert("packcode", packcode.toUtf8());
   d->requester.request("payforpack", gp, pp);
   d->requester.wait();
   QByteArray data = d->requester.result();
@@ -475,9 +498,7 @@ QiwiPost::confirmPackages(Error &error, const QStringList &packages, bool testPr
   QueryParams pp;
 
   const QString confirmContent = PackageReg::toXml(packages, testPrint);
-  qDebug() << confirmContent;
-
-  pp.insert("content", confirmContent.toLocal8Bit());
+  pp.insert("content", confirmContent.toUtf8());
   d->requester.request("getconfirmprintout", gp, pp);
   d->requester.wait();
   QByteArray data = d->requester.result();
@@ -517,7 +538,7 @@ QiwiPost::listStations(Error &error, const QString &town) {
   QueryParams gp;
   QueryParams pp;
 
-  gp.insert("town", town.toLocal8Bit());
+  gp.insert("town", town.toUtf8());
   d->requester.request("getallmetrostations", gp, pp);
   d->requester.wait();
   if ( hasError() ) {
@@ -536,7 +557,7 @@ QiwiPost::listInternalPurchases() {
   QSqlQuery q(d->db);
   PurchaseList result;
 
-  if ( !q.exec("SELECT `uid`, `fname`, `sname`, `phone` FROM `purchase`") ) {
+  if ( !q.exec("SELECT `uid`, `fname`, `sname`, `phone`, `code` FROM `purchase`") ) {
     qDebug() << q.lastError().text();
     return result;
   }
@@ -546,6 +567,7 @@ QiwiPost::listInternalPurchases() {
     purchase.fname = q.value(1).toString();
     purchase.sname = q.value(2).toString();
     purchase.phone = q.value(3).toString();
+    purchase.code = q.value(4).toString();
     result << purchase;
   }
   return result;
@@ -556,7 +578,7 @@ QiwiPost::internalPurchases(const QString &id) {
   QSqlQuery q(d->db);
   Purchase result;
 
-  if ( !q.prepare("SELECT rowid, `fname`, `sname`, `phone` FROM `purchase` WHERE rowid = :uid") ) {
+  if ( !q.prepare("SELECT rowid, `fname`, `sname`, `phone`, `code` FROM `purchase` WHERE rowid = :uid") ) {
     qDebug() << q.lastError().text();
     return result;
   }
@@ -566,10 +588,36 @@ QiwiPost::internalPurchases(const QString &id) {
     return result;
   }
   if ( q.next() ) {
-    result.id = q.value(0).toString();
+    result.id    = q.value(0).toString();
     result.fname = q.value(1).toString();
     result.sname = q.value(2).toString();
     result.phone = q.value(3).toString();
+    result.code  = q.value(4).toString();
+  }
+  return result;
+}
+
+const Purchase
+QiwiPost::internalPurchasesByCode(const QString &code) {
+  QSqlQuery q(d->db);
+  Purchase result;
+
+  if ( !q.prepare("SELECT rowid, `fname`, `sname`, `phone`, `code`, `customerRef` FROM `purchase` WHERE `code` = :code") ) {
+    qDebug() << q.lastError().text();
+    return result;
+  }
+  q.bindValue(":code", code);
+  if ( !q.exec() ) {
+    qDebug() << q.lastError().text();
+    return result;
+  }
+  if ( q.next() ) {
+    result.id    = q.value(0).toString();
+    result.fname = q.value(1).toString();
+    result.sname = q.value(2).toString();
+    result.phone = q.value(3).toString();
+    result.code  = q.value(4).toString();
+    result.customerRef  = q.value(5).toString();
   }
   return result;
 }
@@ -592,6 +640,7 @@ QiwiPost::createPurchase(const Purchase &purchase) {
 
   if ( !q.prepare("INSERT INTO `purchase`(`fname`, `sname`, `phone`, `customerRef`) "
                   "VALUES(:fname, :sname, :phone, :customerRef)") ) {
+    result.error = q.lastError().text();
     qDebug() << q.lastError().text();
     return result;
   }
@@ -600,11 +649,46 @@ QiwiPost::createPurchase(const Purchase &purchase) {
   q.bindValue(":phone", purchase.phone);
   q.bindValue(":customerRef", purchase.customerRef);
   if ( !q.exec() ) {
+    result.error = q.lastError().text();
     qDebug() << q.lastError().text();
     return result;
   }
   result.id = q.lastInsertId().toString();
   return result;
+}
+
+bool
+QiwiPost::assignPurchase(const Purchase &purchase, const QString &packcode) {
+  QSqlQuery q(d->db);
+
+  if ( !q.prepare("UPDATE `purchase` SET `code` = :code WHERE rowid = :uid") ) {
+    qDebug() << q.lastError().text();
+    return false;
+  }
+  q.bindValue(":code", packcode);
+  q.bindValue(":uid", purchase.id);
+  if ( !q.exec() ) {
+    qDebug() << q.lastError().text();
+    return false;
+  }
+  return true;
+}
+
+bool
+QiwiPost::changePurchaseCustomerRef(const Purchase &purchase, const QString &customerRef) {
+  QSqlQuery q(d->db);
+
+  if ( !q.prepare("UPDATE `purchase` SET `customerRef` = :customerRef WHERE rowid = :uid") ) {
+    qDebug() << q.lastError().text();
+    return false;
+  }
+  q.bindValue(":customerRef", customerRef);
+  q.bindValue(":uid", purchase.id);
+  if ( !q.exec() ) {
+    qDebug() << q.lastError().text();
+    return false;
+  }
+  return true;
 }
 
 bool

@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include <qiwipost/dao.h>
 #include <qiwigui/qiwigui.h>
 #include "qiwipostregisterpackage.h"
@@ -15,7 +16,7 @@ QiwiPostRegisterPackage::QiwiPostRegisterPackage(QWidget *parent)
   connect(ui->pbRegister, SIGNAL(clicked()), this, SLOT(registerPackage()));
   connect(ui->pbSelectMachine, SIGNAL(clicked()), this, SLOT(selectMachine()));
 
-  rexv->setRegExp(QRegExp("\\d{11}"));
+  rexv->setRegExp(QRegExp("\\d{10}"));
   ui->lePhone->setValidator(rexv);
 
   ui->cbPackType->setEditable(false);
@@ -36,7 +37,8 @@ QiwiPostRegisterPackage::show(QiwiPost *post, const Package &package) {
   ui->pbRegister->setText(editMode ? trUtf8("Modify") : trUtf8("Register"));
   ui->leMachine->setText(editMode ? package.preferedBoxMachineName : "");
   ui->leOnDeliveryAmount->setText(editMode ? package.onDeliveryAmount : "");
-  ui->lePhone->setText(editMode ? package.receiveremail : "8");
+  ui->lePhone->setText(editMode ? package.receiveremail : "");
+
   ui->teCustomRef->setText("");
   ui->leFirstName->setText("");
   ui->leSecondName->setText("");
@@ -64,7 +66,7 @@ QiwiPostRegisterPackage::show(QiwiPost *post, const Package &package) {
         break;
       }
     }
-    const Purchase p = post->internalPurchases(package.id);
+    const Purchase p = post->internalPurchasesByCode(package.packcode);
     ui->leFirstName->setText(p.fname);
     ui->leSecondName->setText(p.sname);
     ui->teCustomRef->setText(p.customerRef);
@@ -84,7 +86,37 @@ QiwiPostRegisterPackage::show(QiwiPost *post, const Package &package) {
 void
 QiwiPostRegisterPackage::registerPackage() {
   if ( editMode ) {
+    const Purchase p = post->internalPurchasesByCode(editPackage.packcode);
+    const QString customerRef = ui->teCustomRef->toPlainText();
+    const QString packageSize = ui->cbPackType->currentText();
+    Error error;
+    bool isSuccessed = false;
+    if ( editPackage.packsize != packageSize) {
+      if ( !post->chanchePackageSize(error, editPackage.packcode, packageSize) ) {
+        if ( error.hasError ) {
+          QiwiGuiUtils::show(error, this);
+        } else {
+          QMessageBox::information(this,
+                                   trUtf8("Information"),
+                                   trUtf8("I can't change package size."));
+        }
+      } else {
+        isSuccessed = true;
+      }
+    }
+    if (customerRef != p.customerRef ) {
+      QByteArray data = post->changePackageCustomerRef(error, editPackage.packcode, customerRef);
+      if ( error.hasError ) {
+        QiwiGuiUtils::show(error, this);
+      } else {
+        post->changePurchaseCustomerRef(p, customerRef);
+        QiwiGuiUtils::pdfView(data);
+        isSuccessed = true;
+      }
+    }
 
+    if ( isSuccessed )
+      accept();
   } else {
     if ( !isValid() )
       return;
@@ -105,7 +137,8 @@ QiwiPostRegisterPackage::registerPackage() {
     purchase = post->createPurchase(purchase);
     if ( purchase.id.isEmpty() ) {
       error.hasError = true;
-      error.internalError = trUtf8("Can't create internal purchase");
+      error.internalError = trUtf8("Can't create internal purchase\nError: %1")
+          .arg(purchase.error);
       QiwiGuiUtils::show(error, this);
       return;
     }
@@ -114,7 +147,7 @@ QiwiPostRegisterPackage::registerPackage() {
     reg.boxMachineName = machineName;
     reg.customerRef = customerRef;
     reg.id = purchase.id;
-    reg.onDeliveryAmount = onDelivery;
+    reg.onDeliveryAmount = onDelivery.isEmpty() ? "" : onDelivery;
     reg.packType = packageSize;
     reg.senderPhoneNumber = post->getProperty(QiwiPost::QIWIPOST_USERNAME);
 
@@ -130,6 +163,8 @@ QiwiPostRegisterPackage::registerPackage() {
         QiwiGuiUtils::show(p.error, this);
         post->removeInternalPurchase(purchase.id);
         return;
+      } else {
+        post->assignPurchase(purchase, p.packcode);
       }
     }
     accept();
@@ -141,7 +176,7 @@ QiwiPostRegisterPackage::isValid() const {
   return !ui->leFirstName->text().isEmpty() &&
       !ui->leSecondName->text().isEmpty() &&
       !ui->leMachine->text().isEmpty() &&
-      ui->lePhone->text().size() == 11;
+      ui->lePhone->text().size() == 10;
 }
 
 void

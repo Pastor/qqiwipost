@@ -17,7 +17,9 @@ struct QIWIPOSTSHARED_EXPORT Purchase {
     QString sname;
     QString phone;
     QString customerRef;
+    QString code;
     QString id;
+    QString error;
 
     Purchase()
     {}
@@ -25,7 +27,8 @@ struct QIWIPOSTSHARED_EXPORT Purchase {
     Purchase(const Purchase &other)
       : fname(other.fname), sname(other.sname),
         phone(other.phone), id(other.id),
-        customerRef(other.customerRef)
+        code(other.code),
+        customerRef(other.customerRef), error(other.error)
     {}
 };
 typedef QList<Purchase>             PurchaseList;
@@ -157,6 +160,7 @@ struct QIWIPOSTSHARED_EXPORT Package {
   QString packsize;
   QString amountCharged;
   QString calculatedChargeAmount;
+  QString calculatedCharge;
   QString paymentStatus;
   QString creationDate;
   QString labelCreationDate;
@@ -178,6 +182,7 @@ struct QIWIPOSTSHARED_EXPORT Package {
     : packcode(other.packcode), packsize(other.packsize),
       amountCharged(other.amountCharged),
       calculatedChargeAmount(other.calculatedChargeAmount),
+      calculatedCharge(other.calculatedCharge),
       paymentStatus(other.paymentStatus), creationDate(other.creationDate),
       labelCreationDate(other.labelCreationDate), status(other.status),
       isConfPrinted(other.isConfPrinted), labelPrinted(other.labelPrinted),

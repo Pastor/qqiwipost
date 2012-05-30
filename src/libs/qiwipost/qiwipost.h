@@ -28,8 +28,8 @@ public:
   const MachineList       loadMachinesByPoint(const QString &postCode, Error &error);
   const MachineList       loadMachinesByStation(const QString &station, const QString &town, Error &error);
 
-  const QByteArray        loadLabel(const QString &packcode, Error &error, const QString &type = QString());
-  const QByteArray        loadLabel(Error &error, const QString &packcode, const QString &customerRef = QString());
+  const QByteArray        loadLabel(Error &error, const QString &packcode, const QString &type = QString());
+  //const QByteArray        loadLabel(Error &error, const QString &packcode, const QString &customerRef = QString());
 
 
   const QString           loadPackageStatus(const QString &packcode, Error &error);
@@ -44,6 +44,7 @@ public:
   const PackageList       registerPackage(Error &error, const PackageReg &reg);
 
   bool                    unregisterPackage(Error &error, const QString &packcode);
+  const QByteArray        changePackageCustomerRef(Error &error, const QString &packcode, const QString &customerRef);
   bool                    chanchePackageSize(Error &error, const QString &packcode, const QString &packzise);
   const QByteArray        confirmPackages(Error &error, const QStringList &packages, bool testPrint = true);
   bool                    payPackage(Error &error, const QString &packcode);
@@ -55,7 +56,10 @@ public:
 
   const PurchaseList      listInternalPurchases();
   const Purchase          internalPurchases(const QString &id);
+  const Purchase          internalPurchasesByCode(const QString &code);
   const Purchase          createPurchase(const Purchase &purchase);
+  bool                    assignPurchase(const Purchase &purchase, const QString &packcode);
+  bool                    changePurchaseCustomerRef(const Purchase &purchase, const QString &customerRef);
   bool                    removeInternalPurchase(const QString &id);
 
   bool hasError() const;

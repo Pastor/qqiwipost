@@ -80,6 +80,12 @@ void
 QiwiPostMain::reload() {
   Error error;
   tabs->setEnabledUpdatePackage(false);
+  tabs->setEnabledSendPackage(false);
+  Package lastPackage;
+  if ( pm->rowCount() > 0 ) {
+    lastPackage = pm->rowAt(tvPackages->currentIndex().row());
+  }
+
   tvPackages->reset();
   pm->reset();
   for ( int i = 0; i < pm->columnCount(); ++i ) {
@@ -98,6 +104,24 @@ QiwiPostMain::reload() {
     tvPackages->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     if ( pm->rowCount() > 0 )
       tvPackages->selectRow(0);
+
+    PackageListIterator it( collection.packages );
+    while ( it.hasNext() ) {
+      Package p = it.next();
+      if ( p.status == "Created" ) {
+        tabs->setEnabledSendPackage(true);
+        break;
+      }
+    }
+
+    if ( !lastPackage.packcode.isEmpty() ) {
+      for ( int i = 0; i < pm->rowCount(); ++i ) {
+        if ( pm->rowAt(i).packcode == lastPackage.packcode ) {
+          tvPackages->selectRow(i);
+          break;
+        }
+      }
+    }
   }
   tabs->setEnabledUpdatePackage(true);
 }
@@ -117,7 +141,7 @@ QiwiPostMain::currentRowChanged(const QModelIndex &current,
   tabs->setEnabledAppendPackage(true);
   tabs->setEnabledEditPackage(false);
   tabs->setEnabledRemovePackage(false);
-  tabs->setEnabledSendPackage(true);
+  tabs->setEnabledSendPackage(false);
   if ( package.status == "Created" ) {
     tabs->setEnabledEditPackage(true);
     tabs->setEnabledRemovePackage(true);
@@ -168,10 +192,11 @@ QiwiPostMain::showUnregisterPackage() {
                             .arg(currentPackage.packcode));
     }
   } else {
-    post->removeInternalPurchase(currentPackage.id);
+    //post->removeInternalPurchase(currentPackage.id);
     QMessageBox::information(this,
                           trUtf8("Information"),
                           trUtf8("Package \"%1\" remove success")
                           .arg(currentPackage.packcode));
+    reload();
   }
 }

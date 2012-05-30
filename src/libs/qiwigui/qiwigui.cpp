@@ -44,7 +44,8 @@ QiwiGuiUtils::pdf2image(const QByteArray &data) {
 
 void
 QiwiGuiUtils::pdfView(const QByteArray &data) {
-  QTemporaryFile file("qiwipost_pdf_XXXXXXXXXXXXXXXX");
+  QTemporaryFile file("qiwipost_pdf_XXXXXXXXXXXXXXXX.pdf");
+  file.setAutoRemove(false);
   if ( file.open() ) {
     file.write(data);
     file.flush();

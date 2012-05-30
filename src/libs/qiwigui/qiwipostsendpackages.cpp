@@ -72,6 +72,10 @@ QiwiPostSendPackages::reload() {
   PackageListIterator it(pc.packages);
   while ( it.hasNext() ) {
     const Package p = it.next();
+
+    if ( p.packcode.isEmpty() )
+      continue;
+
     QTableWidgetItem *item = new QTableWidgetItem(p.packcode, QTableWidgetItem::UserType);
     item->setData( Qt::UserRole, qVariantFromValue<Package>(p) );
     item->setFlags( item->flags() | Qt::ItemIsUserCheckable );

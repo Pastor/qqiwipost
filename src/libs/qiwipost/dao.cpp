@@ -33,7 +33,8 @@ namespace Internal {
   static const char * const LOCATIONDESCRIPTION = "locationdescription";
 
   static const char * const PACK = "pack";
-  static const char * const STARTDATE = "startdate";
+  static const char * const STARTDATE = "startdate";//calculatedcharge
+  static const char * const CALCULATEDCHARGE = "calculatedcharge";
   static const char * const ENDDATE = "enddate";
   static const char * const RESULTS = "results";
   static const char * const PACKCODE = "packcode";
@@ -78,6 +79,13 @@ using namespace Qiwi::Internal;
 /** struct Error*/
 bool
 Error::load(const QByteArray &data) {
+
+  if ( data.size() == 0 ) {
+    hasError = true;
+    internalError = QString("Data empty");
+    return true;
+  }
+
   QXmlStreamReader reader(data);
   while (!reader.atEnd()) {
     reader.readNext();
@@ -350,6 +358,8 @@ Package::load(QXmlStreamReader &reader) {
           amountCharged = reader.readElementText().trimmed();
         } else if ( element == CALCULATEDCHARGEAMOUNT ) {
           calculatedChargeAmount = reader.readElementText().trimmed();
+        } else if ( element == CALCULATEDCHARGE ) {
+          calculatedCharge = reader.readElementText().trimmed();
         } else if ( element == PAYMENTSTATUS ) {
           paymentStatus = reader.readElementText().trimmed();
         } else if ( element == CREATIONDATE ) {
@@ -743,7 +753,7 @@ PackageReg::toXml(int tab) const {
   writer.setAutoFormattingIndent(tab);
   writer.writeStartElement("pack");
   private_writeElement(writer, "id", id);
-  private_writeElement(writer, "addressPhoneNumber", addressPhoneNumber);
+  private_writeElement(writer, "adreseePhoneNumber", addressPhoneNumber);
   private_writeElement(writer, "senderPhoneNumber", senderPhoneNumber);
   private_writeElement(writer, "boxMachineName", boxMachineName);
   private_writeElement(writer, "packType", packType);
@@ -760,7 +770,7 @@ PackageReg::toXml(const PackageRegList &list, bool autoLabel, int tab) {
 
 
   stream << "<paczkomaty>";
-  stream << "<autoLabels>" << (autoLabel ? "1" : "0") << "<autoLabels>";
+  stream << "<autoLabels>" << (autoLabel ? "1" : "0") << "</autoLabels>";
   PackageRegListIterator it(list);
   while ( it.hasNext() ) {
     const PackageReg reg = it.next();

@@ -57,7 +57,7 @@ QiwiPostPackageView::load(QiwiPost *post, const Package &p) {
     }
   }
 
-  Purchase purchase = post->internalPurchases(p.id);
+  Purchase purchase = post->internalPurchasesByCode(p.packcode);
   ui->leFirstName->setText(purchase.fname);
   ui->leSecondName->setText(purchase.sname);
   setEnabledElements(false);
