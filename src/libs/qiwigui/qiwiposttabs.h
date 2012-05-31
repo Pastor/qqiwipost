@@ -33,6 +33,7 @@ class QIWIGUISHARED_EXPORT QiwiPostTabs : public QWidget {
     void proxy_editPackage();
 
     void labelOpen();
+    void labelOpenA6();
   signals:
     void updatePackages();
     void appendPackage();

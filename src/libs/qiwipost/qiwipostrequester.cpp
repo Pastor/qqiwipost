@@ -49,6 +49,7 @@ QiwiPostRequesterPrivate::prepareParams(const QueryParams &params) const {
 
   }
   return urlParams.encodedQuery();
+  //return urlParams.toEncoded(QUrl::None);
 }
 
 void

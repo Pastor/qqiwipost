@@ -44,6 +44,9 @@ QiwiPostMain::QiwiPostMain(QWidget *parent) :
   connect(tabs, SIGNAL(removePackage()),
           this, SLOT(showUnregisterPackage()));
 
+  connect(packView, SIGNAL(refresh()),
+          this, SLOT(reload()));
+
   tabs->setEnabledAppendPackage(true);
   tabs->setEnabledEditPackage(false);
   tabs->setEnabledRemovePackage(false);
@@ -145,6 +148,7 @@ QiwiPostMain::currentRowChanged(const QModelIndex &current,
   if ( package.status == "Created" ) {
     tabs->setEnabledEditPackage(true);
     tabs->setEnabledRemovePackage(true);
+  } else if ( package.status == "Prepared" ) {
     tabs->setEnabledSendPackage(true);
   }
   currentPackage = package;

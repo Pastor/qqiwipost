@@ -22,6 +22,8 @@ QiwiPostTabs::QiwiPostTabs(QWidget *parent) :
           this, SLOT(proxy_sendPackage()));
   connect(ui->pbOpen, SIGNAL(clicked()),
           this, SLOT(labelOpen()));
+  connect(ui->pbA6, SIGNAL(clicked()),
+           this, SLOT(labelOpenA6()));
 }
 
 QiwiPostTabs::~QiwiPostTabs() {
@@ -88,6 +90,7 @@ QiwiPostTabs::setData(QiwiPost *post, const Package &package) {
   this->post = post;
   this->package = package;
   ui->pbOpen->setEnabled( post != 0 && !package.packcode.isEmpty() );
+  ui->pbA6->setEnabled( post != 0 && !package.packcode.isEmpty() );
 }
 
 void
@@ -96,6 +99,18 @@ QiwiPostTabs::labelOpen() {
     return;
   Error error;
   QByteArray data = post->loadLabel(error, package.packcode);
+  if ( error.hasError ) {
+    QiwiGuiUtils::show(error, this);
+  } else
+    QiwiGuiUtils::pdfView(data);
+}
+
+void
+QiwiPostTabs::labelOpenA6() {
+  if ( post == 0 || package.packcode.isEmpty() )
+    return;
+  Error error;
+  QByteArray data = post->loadLabel(error, package.packcode, "A6P");
   if ( error.hasError ) {
     QiwiGuiUtils::show(error, this);
   } else

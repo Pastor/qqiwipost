@@ -54,7 +54,7 @@ QiwiPostSendPackages::reload() {
     return;
   }
   Error error;
-  const PackageCollection pc = post->loadPackages(error, "Created");
+  const PackageCollection pc = post->loadPackages(error, "Prepared");
 
   if ( error.hasError ) {
     QiwiGuiUtils::show(error, this);

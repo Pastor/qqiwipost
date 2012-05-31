@@ -266,8 +266,7 @@ QiwiPost::loadLabel(Error &error, const QString &packcode, const QString &type) 
 
   //qDebug() << packcode.toUtf8();
   pp.insert("packcode", packcode.toUtf8());
-  if ( !type.isEmpty() )
-    pp.insert("labelType", type.toUtf8());
+  pp.insert("labelType", type.toUtf8());
   d->requester.request("getsticker", gp, pp);
   d->requester.wait();
   if ( hasError() ) {
@@ -388,7 +387,7 @@ QiwiPost::registerPackage(Error &error, const PackageReg &reg) {
   QueryParams gp;
   QueryParams pp;
 
-  pp.insert("content", PackageReg::toXml(PackageRegList() << reg).toUtf8());
+  pp.insert("content", PackageReg::toXml(PackageRegList() << reg, false).toUtf8());
   d->requester.request("createdeliverypacks", gp, pp);
   d->requester.wait();
   if ( hasError() ) {
@@ -498,6 +497,7 @@ QiwiPost::confirmPackages(Error &error, const QStringList &packages, bool testPr
   QueryParams pp;
 
   const QString confirmContent = PackageReg::toXml(packages, testPrint);
+  //qDebug() << confirmContent;
   pp.insert("content", confirmContent.toUtf8());
   d->requester.request("getconfirmprintout", gp, pp);
   d->requester.wait();

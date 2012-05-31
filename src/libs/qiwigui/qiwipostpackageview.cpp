@@ -1,5 +1,6 @@
 
 #include <QDateTime>
+#include <qiwigui/qiwigui.h>
 #include "qiwipostpackageview.h"
 #include "ui_qiwipostpackageview.h"
 
@@ -10,8 +11,7 @@ namespace Qiwi {
 using namespace Qiwi;
 
 QiwiPostPackageView::QiwiPostPackageView(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::QiwiPostPackageView) {
+  QWidget(parent), ui(new Ui::QiwiPostPackageView), post(0) {
   ui->setupUi(this);
 
   ui->cbConfirm->addItem(trUtf8("No"));
@@ -20,6 +20,9 @@ QiwiPostPackageView::QiwiPostPackageView(QWidget *parent) :
   ui->cbLabelCreated->addItem(trUtf8("No"));
   ui->cbLabelCreated->addItem(trUtf8("Yes"));
   setEnabledElements(false);
+
+  connect(ui->pbPay, SIGNAL(clicked()),
+          this, SLOT(pay()));
 }
 
 QiwiPostPackageView::~QiwiPostPackageView() {
@@ -28,6 +31,8 @@ QiwiPostPackageView::~QiwiPostPackageView() {
 
 void
 QiwiPostPackageView::load(QiwiPost *post, const Package &p) {
+  this->post = post;
+  pack = p;
   preinit(post);
   reset();
   ui->leAltMachineName->setText(p.alternativeBoxMachineName);
@@ -61,6 +66,7 @@ QiwiPostPackageView::load(QiwiPost *post, const Package &p) {
   ui->leFirstName->setText(purchase.fname);
   ui->leSecondName->setText(purchase.sname);
   setEnabledElements(false);
+  ui->pbPay->setEnabled( p.status == "Created" );
 }
 
 const Package
@@ -128,5 +134,18 @@ QiwiPostPackageView::setEnabledElements(bool value) {
       qobject_cast<QLineEdit *>(w)->setReadOnly(!value);
     else if ( qobject_cast<QComboBox *>(w) != 0 )
       qobject_cast<QComboBox *>(w)->setEnabled(value);
+  }
+}
+
+void
+QiwiPostPackageView::pay() {
+  if ( post != 0 && !pack.packcode.isEmpty() ) {
+    Error error;
+    bool result = post->payPackage(error, pack.packcode);
+    if ( !result || error.hasError ) {
+      QiwiGuiUtils::show(error, this);
+    } else {
+      emit refresh();
+    }
   }
 }

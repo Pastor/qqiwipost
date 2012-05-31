@@ -19,188 +19,15 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="0">
-    <widget class="QLabel" name="lblCreated">
-     <property name="text">
-      <string>Label created</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="QLabel" name="lblDeliveryAmount">
-     <property name="text">
-      <string>On delivery amount</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="4">
-    <widget class="QLineEdit" name="leDeliveryAmount"/>
-   </item>
-   <item row="5" column="3">
-    <widget class="QLabel" name="lblAltMachineName">
-     <property name="text">
-      <string>Alternative machine</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1" colspan="2">
-    <widget class="QLineEdit" name="leId"/>
-   </item>
-   <item row="8" column="4">
-    <widget class="QLineEdit" name="leCustomerRef"/>
-   </item>
-   <item row="9" column="2" colspan="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>65</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="lblCreationDate">
-     <property name="text">
-      <string>Creation date</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="3">
-    <widget class="QLabel" name="lblMachineName">
-     <property name="text">
-      <string>Machine</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="4">
-    <widget class="QLineEdit" name="leAmountCharge"/>
-   </item>
-   <item row="7" column="3">
-    <widget class="QLabel" name="lblAmount">
-     <property name="text">
-      <string>Amount charge</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="lblId">
-     <property name="text">
-      <string>Internal Id</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="4">
-    <widget class="QLineEdit" name="leMachineName"/>
-   </item>
-   <item row="6" column="1" colspan="2">
-    <widget class="QLineEdit" name="lePaymentStatus"/>
-   </item>
-   <item row="7" column="1" colspan="2">
-    <widget class="QLineEdit" name="leCreationDate"/>
-   </item>
-   <item row="8" column="3">
-    <widget class="QLabel" name="lblCustomerRef">
-     <property name="text">
-      <string>Customer ref</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="4">
-    <widget class="QLineEdit" name="leAltMachineName"/>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lblPaymentStatus">
-     <property name="text">
-      <string>Payment status</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lblCalculatedCharge">
-     <property name="text">
-      <string>Calculated charge</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" colspan="2">
-    <widget class="QLineEdit" name="leCalculatedCharge"/>
-   </item>
-   <item row="4" column="4">
-    <widget class="QLineEdit" name="leLabelCreationDate"/>
-   </item>
-   <item row="4" column="1">
-    <widget class="QComboBox" name="cbLabelCreated"/>
-   </item>
-   <item row="4" column="3">
-    <widget class="QLabel" name="lblLabelCreationDate">
-     <property name="text">
-      <string>Label creation date</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QLineEdit" name="lePackCode"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lblPackSize">
-     <property name="text">
-      <string>PackSize</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lblFirstName">
-     <property name="text">
-      <string>Second name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lblPackCode">
-     <property name="text">
-      <string>PackCode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QLineEdit" name="leSecondName"/>
-   </item>
-   <item row="1" column="4">
-    <widget class="QComboBox" name="cbConfirm"/>
-   </item>
-   <item row="3" column="1">
-    <widget class="QComboBox" name="cbPackSize"/>
-   </item>
-   <item row="1" column="1" colspan="2">
-    <widget class="QLineEdit" name="leFirstName"/>
-   </item>
-   <item row="0" column="0">
+   <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="lblSecondName">
      <property name="text">
       <string>First name</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="4">
-    <widget class="QLineEdit" name="lePhone"/>
-   </item>
-   <item row="1" column="3">
-    <widget class="QLabel" name="lblConfirm">
-     <property name="text">
-      <string>Confirm</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="3">
-    <widget class="QLabel" name="lblStatus">
-     <property name="text">
-      <string>Status</string>
-     </property>
-    </widget>
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="leSecondName"/>
    </item>
    <item row="0" column="3">
     <widget class="QLabel" name="lblPhone">
@@ -209,10 +36,83 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="4">
+   <item row="0" column="5">
+    <widget class="QLineEdit" name="lePhone"/>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lblFirstName">
+     <property name="text">
+      <string>Second name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLineEdit" name="leFirstName"/>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLabel" name="lblConfirm">
+     <property name="text">
+      <string>Confirm</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QComboBox" name="cbConfirm"/>
+   </item>
+   <item row="1" column="6">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lblPackCode">
+     <property name="text">
+      <string>PackCode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLineEdit" name="lePackCode"/>
+   </item>
+   <item row="2" column="3">
+    <widget class="QLabel" name="lblStatus">
+     <property name="text">
+      <string>Status</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="5">
     <widget class="QLineEdit" name="leStatus"/>
    </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lblPackSize">
+     <property name="text">
+      <string>PackSize</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QComboBox" name="cbPackSize"/>
+   </item>
+   <item row="3" column="3" colspan="2">
+    <widget class="QLabel" name="lblDeliveryAmount">
+     <property name="text">
+      <string>On delivery amount</string>
+     </property>
+    </widget>
+   </item>
    <item row="3" column="5">
+    <widget class="QLineEdit" name="leDeliveryAmount"/>
+   </item>
+   <item row="3" column="6">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -225,15 +125,180 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="5">
-    <spacer name="horizontalSpacer_2">
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="lblCreated">
+     <property name="text">
+      <string>Label created</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QComboBox" name="cbLabelCreated"/>
+   </item>
+   <item row="4" column="3" colspan="2">
+    <widget class="QLabel" name="lblLabelCreationDate">
+     <property name="text">
+      <string>Label creation date</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="5">
+    <widget class="QLineEdit" name="leLabelCreationDate"/>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QLabel" name="lblCalculatedCharge">
+     <property name="text">
+      <string>Calculated charge</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QLineEdit" name="leCalculatedCharge"/>
+   </item>
+   <item row="5" column="3" colspan="2">
+    <widget class="QLabel" name="lblAltMachineName">
+     <property name="text">
+      <string>Alternative machine</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="5">
+    <widget class="QLineEdit" name="leAltMachineName"/>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="lblPaymentStatus">
+     <property name="text">
+      <string>Payment status</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QLineEdit" name="lePaymentStatus"/>
+   </item>
+   <item row="6" column="3">
+    <widget class="QLabel" name="lblMachineName">
+     <property name="text">
+      <string>Machine</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="5">
+    <widget class="QLineEdit" name="leMachineName"/>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <widget class="QLabel" name="lblCreationDate">
+     <property name="text">
+      <string>Creation date</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QLineEdit" name="leCreationDate"/>
+   </item>
+   <item row="7" column="3" colspan="2">
+    <widget class="QLabel" name="lblAmount">
+     <property name="text">
+      <string>Amount charge</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="5">
+    <widget class="QLineEdit" name="leAmountCharge"/>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QLabel" name="lblId">
+     <property name="text">
+      <string>Internal Id</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="QLineEdit" name="leId"/>
+   </item>
+   <item row="8" column="3" colspan="2">
+    <widget class="QLabel" name="lblCustomerRef">
+     <property name="text">
+      <string>Customer ref</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="5">
+    <widget class="QLineEdit" name="leCustomerRef"/>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pbPay">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Pay</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>78</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="9" column="2">
+    <spacer name="horizontalSpacer_4">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>40</width>
+       <width>78</width>
        <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="9" column="4" rowspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>65</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="10" column="1">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>25</height>
       </size>
      </property>
     </spacer>

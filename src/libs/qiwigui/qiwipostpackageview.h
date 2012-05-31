@@ -33,13 +33,17 @@ class QIWIGUISHARED_EXPORT QiwiPostPackageView : public QWidget {
     const PackageReg packageReg(QiwiPost *post) const;
 
     void setMode(Mode mode);
-
+  signals:
+    void refresh();
   public slots:
     void reset();
+    void pay();
     void preinit(QiwiPost *post);
     void setEnabledElements(bool value);
   private:
     Ui::QiwiPostPackageView *ui;
+    QiwiPost                *post;
+    Package                 pack;
 };
 
 }

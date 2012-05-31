@@ -4,101 +4,101 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="181"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="264"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="451"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="637"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="731"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="188"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="271"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="458"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="644"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="738"/>
         <source>Error parse data: %2, at line %3, column %4</source>
         <translation type="unfinished">Ошибка разбора: %2, в строке %3, колонка %4</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="468"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="502"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="475"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="509"/>
         <source>Created</source>
         <translation type="unfinished">Посылка создана</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="470"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="504"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="477"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="511"/>
         <source>Prepared</source>
         <translation type="unfinished">Посылка подготовлена</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="472"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="506"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="479"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="513"/>
         <source>Sent</source>
         <translation type="unfinished">Доставлена в сортировочный центр</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="474"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="508"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="481"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="515"/>
         <source>InTransit</source>
         <translation type="unfinished">Направлена в терминал</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="476"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="510"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="483"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="517"/>
         <source>Stored</source>
         <translation type="unfinished">Размещена в терминале</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="478"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="512"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="485"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="519"/>
         <source>Delivered</source>
         <translation type="unfinished">Доставлена получателю</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="480"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="514"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="487"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="521"/>
         <source>Avizo</source>
         <translation type="unfinished">3 суток простоя</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="482"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="516"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="489"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="523"/>
         <source>Expired</source>
         <translation type="unfinished">Просрочена к доставке</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="484"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="518"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="491"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="525"/>
         <source>ReturnedToAgency</source>
         <translation type="unfinished">Отправлена на пункт просрочки</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="486"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="520"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="493"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="527"/>
         <source>DeliveredToAgency</source>
         <translation type="unfinished">Доставлена на пункт просрочки</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="488"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="522"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="495"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="529"/>
         <source>ReturnedToSortingCenter</source>
         <translation type="unfinished">Отправлена в сортировочный центр</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="490"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="524"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="497"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="531"/>
         <source>DeliveredToSortingCenter</source>
         <translation type="unfinished">Доставлена в сортировочный центр</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="492"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="526"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="499"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="533"/>
         <source>ReturnedTosender</source>
         <translation type="unfinished">Возвращена отправителю</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="494"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="528"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="501"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="535"/>
         <source>Cancelled</source>
         <translation type="unfinished">Аннулирована</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="496"/>
-        <location filename="../../src/libs/qiwipost/dao.cpp" line="530"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="503"/>
+        <location filename="../../src/libs/qiwipost/dao.cpp" line="537"/>
         <source>Unknown</source>
         <translation type="unfinished">Неизвестное</translation>
     </message>
@@ -107,16 +107,15 @@
         <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="216"/>
         <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="236"/>
         <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="255"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="277"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="300"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="323"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="355"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="379"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="398"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="418"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="441"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="464"/>
-        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="486"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="276"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="322"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="354"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="378"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="397"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="417"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="440"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="463"/>
+        <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="485"/>
         <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="509"/>
         <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="529"/>
         <location filename="../../src/libs/qiwipost/qiwipost.cpp" line="548"/>
@@ -292,22 +291,22 @@
 <context>
     <name>Qiwi::QiwiPostMain</name>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostmain.cpp" line="176"/>
+        <location filename="../../src/libs/qiwigui/qiwipostmain.cpp" line="194"/>
         <source>Exception</source>
         <translation type="unfinished">Ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostmain.cpp" line="177"/>
+        <location filename="../../src/libs/qiwigui/qiwipostmain.cpp" line="195"/>
         <source>Can&apos;t remove &quot;%1&quot; package</source>
         <translation type="unfinished">Невозможно удалить &quot;%1&quot; посылку</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostmain.cpp" line="183"/>
+        <location filename="../../src/libs/qiwigui/qiwipostmain.cpp" line="201"/>
         <source>Information</source>
         <translation type="unfinished">Информация</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostmain.cpp" line="184"/>
+        <location filename="../../src/libs/qiwigui/qiwipostmain.cpp" line="202"/>
         <source>Package &quot;%1&quot; remove success</source>
         <translation type="unfinished">Посылка &quot;%1&quot; удачно удалена</translation>
     </message>
@@ -437,17 +436,17 @@
         <translation type="unfinished">Регистрировать</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostregisterpackage.cpp" line="99"/>
+        <location filename="../../src/libs/qiwigui/qiwipostregisterpackage.cpp" line="100"/>
         <source>Information</source>
         <translation type="unfinished">Информация</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostregisterpackage.cpp" line="100"/>
+        <location filename="../../src/libs/qiwigui/qiwipostregisterpackage.cpp" line="101"/>
         <source>I can&apos;t change package size.</source>
         <translation type="unfinished">Я не могу изменить тип посылки.</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostregisterpackage.cpp" line="133"/>
+        <location filename="../../src/libs/qiwigui/qiwipostregisterpackage.cpp" line="140"/>
         <source>Can&apos;t create internal purchase
 Error: %1</source>
         <translation type="unfinished">Не могу создать внутреннюю посылку, обратитесь к разработчику. Ошибка: %1</translation>
@@ -582,52 +581,57 @@ Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="25"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="131"/>
         <source>Label created</source>
         <translation type="unfinished">Этикета коздана</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="32"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="108"/>
         <source>On delivery amount</source>
         <translation type="unfinished">Сумма платежа</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="42"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="161"/>
         <source>Alternative machine</source>
         <translation type="unfinished">Запасной терминал</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="68"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="191"/>
         <source>Creation date</source>
         <translation type="unfinished">Дата создания</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="75"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="181"/>
         <source>Machine</source>
         <translation type="unfinished">Основной терминал</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="85"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="201"/>
         <source>Amount charge</source>
         <translation type="unfinished">Сумма оплаты</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="92"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="211"/>
         <source>Internal Id</source>
         <translation type="unfinished">Идентификатор</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="108"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="221"/>
         <source>Customer ref</source>
         <translation type="unfinished">Описание</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="118"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="248"/>
+        <source>Pay</source>
+        <translation type="unfinished">Оплата</translation>
+    </message>
+    <message>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="171"/>
         <source>Payment status</source>
         <translation type="unfinished">Статус платежа</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="125"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="151"/>
         <source>Calculated charge</source>
         <translation type="unfinished">Общая цена посылки</translation>
     </message>
@@ -637,37 +641,37 @@ Error: %1</source>
         <translation type="unfinished">Дата создания этикетки</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="151"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="98"/>
         <source>PackSize</source>
         <translation type="unfinished">Типоразмер</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="158"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="45"/>
         <source>Second name</source>
         <translation type="unfinished">Имя</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="184"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="25"/>
         <source>First name</source>
         <translation type="unfinished">Фамилия</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="165"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="78"/>
         <source>PackCode</source>
         <translation type="unfinished">Код посылки</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="194"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="55"/>
         <source>Confirm</source>
         <translation type="unfinished">Подтверждение</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="201"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="88"/>
         <source>Status</source>
         <translation type="unfinished">Статус</translation>
     </message>
     <message>
-        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="208"/>
+        <location filename="../../src/libs/qiwigui/qiwipostpackageview.ui" line="35"/>
         <source>Phone</source>
         <translation type="unfinished">Телефон</translation>
     </message>
@@ -827,6 +831,11 @@ Error: %1</source>
         <location filename="../../src/libs/qiwigui/qiwiposttabs.ui" line="222"/>
         <source>Open</source>
         <translation type="unfinished">Открыть</translation>
+    </message>
+    <message>
+        <location filename="../../src/libs/qiwigui/qiwiposttabs.ui" line="270"/>
+        <source>A6</source>
+        <translation type="unfinished">Формат A6</translation>
     </message>
 </context>
 </TS>
