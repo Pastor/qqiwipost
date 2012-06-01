@@ -266,7 +266,7 @@ QiwiPost::loadLabel(Error &error, const QString &packcode, const QString &type) 
 
   //qDebug() << packcode.toUtf8();
   pp.insert("packcode", packcode.toUtf8());
-  pp.insert("labelType", type.toUtf8());
+  pp.insert("labeltype", type.toUtf8());
   d->requester.request("getsticker", gp, pp);
   d->requester.wait();
   if ( hasError() ) {
